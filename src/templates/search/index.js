@@ -1,4 +1,4 @@
-import { categories, languages, levels, mock } from 'helpers'
+import { technologies, levels, mock, languages } from 'helpers'
 import { useState } from 'react'
 import styled from 'styled-components'
 
@@ -59,28 +59,25 @@ const Tag = styled.div`
 export default function Search() {
   const [items, setItems] = useState([])
   const [showFilters, setShowFilters] = useState(false)
+  const [searchText, setSearchText] = useState(undefined)
   const [selectedLevel, setSelectedLevel] = useState(undefined)
-  const [selectedCategories, setSelectedCategories] = useState([])
-  const [selectedLanguages, setSelectedLanguages] = useState([])
+  const [selectedLanguage, setSelectedLanguage] = useState(undefined)
+  const [selectedTechnologies, setSelectedTechnologies] = useState([])
   const [searching, setSearching] = useState(false)
 
-  const onSelectCategory = (category) => {
-    if (!selectedCategories.includes(category))
-      return setSelectedCategories((p) => [...p, category])
-    return setSelectedCategories((p) => p.filter((x) => x !== category))
-  }
-
   const onSelectLanguage = (language) => {
-    if (!selectedLanguages.includes(language)) return setSelectedLanguages((p) => [...p, language])
-    return setSelectedLanguages((p) => p.filter((x) => x !== language))
+    if (!selectedTechnologies.includes(language))
+      return setSelectedTechnologies((p) => [...p, language])
+    return setSelectedTechnologies((p) => p.filter((x) => x !== language))
   }
 
   const onSearch = () => {
     setSearching(true)
 
     const hasLevel = !!selectedLevel
-    const hasCategories = !!selectedCategories.length
-    if (!hasLevel && !hasCategories) {
+    const hasTechnology = !!selectedTechnologies.length
+
+    if (!hasLevel && !hasTechnology) {
       return setTimeout(() => {
         setItems(mock)
         setSearching(false)
@@ -88,11 +85,14 @@ export default function Search() {
     }
 
     const filtred = mock.reduce((acc, curr) => {
-      const isSameLevel = curr.level === selectedLevel
-      const includesCategories = selectedCategories.some((x) => curr.categories.includes(x))
-      const includesLanguages = selectedLanguages.some((x) => curr.languages.includes(x))
+      const t = (x) => String(x).toLowerCase()
 
-      if (isSameLevel || includesCategories || includesLanguages) {
+      const hasText = t(curr.link).includes(t(searchText)) || t(curr.title).includes(t(searchText))
+      const isSameLanguage = curr.language === selectedLanguage
+      const isSameLevel = curr.level === selectedLevel
+      const includedTechnologies = selectedTechnologies.some((x) => curr.languages.includes(x))
+
+      if (isSameLevel || includedTechnologies || isSameLanguage || hasText) {
         acc.push(curr)
       }
 
@@ -113,46 +113,50 @@ export default function Search() {
           <FiltersButton onClick={() => setShowFilters((p) => !p)}>
             {showFilters ? 'Hide' : 'Show'} filters
           </FiltersButton>
-          <SearchInput placeholder="Type your search..." />
+          <SearchInput
+            placeholder="Type your search..."
+            value={searchText}
+            onChange={({ target }) => setSearchText(target.value)}
+          />
           <SearchButton disabled={searching} onClick={onSearch}>
             {!searching ? 'Search' : 'Searching...'}
           </SearchButton>
         </div>
         {showFilters && (
           <Filters>
-            <div>Languages</div>
+            <div>languages</div>
             <Tags>
-              {languages.map((language) => (
+              {languages.map((lang) => (
                 <Tag
-                  key={language}
-                  onClick={() => onSelectLanguage(language)}
-                  active={selectedLanguages.includes(language)}
+                  key={lang}
+                  onClick={() => setSelectedLanguage(lang)}
+                  active={selectedLanguage === lang}
                 >
-                  {language}
+                  {lang}
+                </Tag>
+              ))}
+            </Tags>
+            <div>technologies</div>
+            <Tags>
+              {technologies.map((tech) => (
+                <Tag
+                  key={tech}
+                  onClick={() => onSelectLanguage(tech)}
+                  active={selectedTechnologies.includes(tech)}
+                >
+                  {tech}
                 </Tag>
               ))}
             </Tags>
             <div>Level</div>
             <Tags>
-              {levels.map((l) => (
+              {levels.map((level) => (
                 <Tag
-                  key={l}
-                  onClick={() => setSelectedLevel((p) => (p === l ? undefined : l))}
-                  active={selectedLevel === l}
+                  key={level}
+                  onClick={() => setSelectedLevel((p) => (p === level ? undefined : level))}
+                  active={selectedLevel === level}
                 >
-                  {l}
-                </Tag>
-              ))}
-            </Tags>
-            <div>Category</div>
-            <Tags>
-              {categories.map((c) => (
-                <Tag
-                  key={c}
-                  onClick={() => onSelectCategory(c)}
-                  active={selectedCategories.includes(c)}
-                >
-                  {c}
+                  {level}
                 </Tag>
               ))}
             </Tags>

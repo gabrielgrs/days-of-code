@@ -67,7 +67,7 @@ export default function Result({ list }) {
             {item.title}
           </Title>
           <div>
-            {item.level} - {item.categories.join(',')} - {item.languages.join(',')}
+            {item.level} - {item.technologies.join(',')} - {item.language}
           </div>
         </Item>
       ))}

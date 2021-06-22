@@ -1,4 +1,4 @@
-import { categories, generateRandomNumber, languages, levels } from 'helpers'
+import { technologies, generateRandomNumber, languages, levels } from 'helpers'
 import { useState } from 'react'
 import styled from 'styled-components'
 
@@ -67,12 +67,11 @@ const Tab = styled.div`
 
 export default function Profile({ isOpen, onClose }) {
   const tabs = {
-    language: 'language',
+    technology: 'technology',
     level: 'level',
-    category: 'category',
   }
 
-  const [currentTab, setCurrentTab] = useState(tabs.language)
+  const [currentTab, setCurrentTab] = useState(tabs.technology)
 
   if (!isOpen) return null
 
@@ -106,8 +105,8 @@ export default function Profile({ isOpen, onClose }) {
             ))}
         </Tags>
         <Tags>
-          {currentTab === tabs.category &&
-            categories.map((l) => (
+          {currentTab === tabs.technology &&
+            technologies.map((l) => (
               <Tag key={l} percentage={Math.trunc(generateRandomNumber(1, 100))}>
                 {l}
               </Tag>
