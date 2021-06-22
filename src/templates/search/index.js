@@ -19,7 +19,7 @@ const Content = styled.div`
   max-width: 992px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: ${({ theme }) => theme.sizes.xs};
 `
 
 const Title = styled.h1``
@@ -43,20 +43,20 @@ const Tags = styled.div`
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: ${({ theme }) => theme.sizes.xs};
 `
 
 const Tag = styled.div`
   cursor: pointer;
   border: solid black 2px;
-  padding: 4px 8px;
+  padding: ${({ theme }) => `${theme.sizes.xxs} ${theme.sizes.xs}`};
   user-select: none;
 
   background: ${({ active }) => (active ? 'black' : 'white')};
   color: ${({ active }) => (active ? 'white' : 'black')};
 `
 
-export default function Home() {
+export default function Search() {
   const [items, setItems] = useState([])
   const [showFilters, setShowFilters] = useState(false)
   const [selectedLevel, setSelectedLevel] = useState(undefined)

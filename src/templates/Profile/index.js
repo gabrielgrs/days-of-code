@@ -20,7 +20,7 @@ const Modal = styled.div`
   background: white;
   width: 100%;
   max-width: 500px;
-  padding: 16px 32px;
+  padding: ${({ theme }) => `${theme.sizes.sm} ${theme.sizes.lg}`};
 `
 
 const Tags = styled.div`
@@ -28,38 +28,38 @@ const Tags = styled.div`
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: ${({ theme }) => theme.sizes.xs};
 `
 
 const Tag = styled.div`
   border: solid black 2px;
-  padding: 4px 8px;
+  padding: ${({ theme }) => `${theme.sizes.xxs} ${theme.sizes.xs}`};
   user-select: none;
 
-  background: ${({ percentage }) => {
+  background: ${({ theme, percentage }) => {
     const rest = 100 - percentage
-    return `linear-gradient(90deg, #ffc0cb ${rest}%, white ${percentage}%)`
+    return `linear-gradient(to right, ${theme.colors.secondary} ${rest}%, white 100%)`
   }};
 `
 
 const Tabs = styled.div`
-  margin: 8px 0 24px;
+  margin: ${({ theme }) => `${theme.sizes.xs} 0 ${theme.sizes.md}`};
   display: flex;
-  gap: 10px;
+  gap: ${({ theme }) => theme.sizes.xs};
 `
 
 const Tab = styled.div`
   cursor: pointer;
   position: relative;
   font-weight: ${({ active }) => active && '600'};
-  padding: 0 4px;
+  padding: 0 ${({ theme }) => theme.sizes.xxs};
 
   &::after {
     content: ' ';
     position: absolute;
     width: 100%;
     height: 3px;
-    background: ${({ active }) => active && 'red'};
+    background: ${({ theme, active }) => active && theme.colors.secondary};
     bottom: -4px;
     left: 0;
   }
