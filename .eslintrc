@@ -1,3 +1,17 @@
 {
-  "extends": ["next", "next/core-web-vitals"]
+  "extends": ["next", "next/core-web-vitals"],
+  "globals": {
+    "process": true
+  },
+  "env": {
+    "node": true,
+    "browser": true,
+    "es6": true
+  },
+  "rules": {
+    "no-unused-vars": "error",
+    "no-undef": "error",
+    "import/order": "error",
+    "no-console": "error"
+  }
 }
