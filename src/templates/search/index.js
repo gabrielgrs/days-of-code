@@ -126,7 +126,7 @@ export default function Home() {
                 <Tag
                   key={language}
                   onClick={() => onSelectLanguage(language)}
-                  active={setSelectedLanguages.includes(language)}
+                  active={selectedLanguages.includes(language)}
                 >
                   {language}
                 </Tag>
