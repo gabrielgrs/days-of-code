@@ -55,6 +55,7 @@ export default function Search() {
   const [items, setItems] = useState([])
   const [showFilters, setShowFilters] = useState(false)
   const [searchText, setSearchText] = useState(undefined)
+  const [lastSearch, setLastSearch] = useState(undefined)
   const [selectedLevel, setSelectedLevel] = useState(undefined)
   const [selectedLanguage, setSelectedLanguage] = useState(undefined)
   const [selectedTechnologies, setSelectedTechnologies] = useState([])
@@ -72,6 +73,13 @@ export default function Search() {
 
   const onReport = (contentId) => alert(`Under construction - ${contentId}`)
 
+  const onSetLastSearch = (rawQuery) => {
+    const query = rawQuery.toString()
+    if (!query) return setLastSearch(undefined)
+    const formatted = query.replaceAll('=', ': ').replaceAll('&', ' & ').replaceAll('%2C', ', ')
+    setLastSearch(formatted)
+  }
+
   const onSearch = async () => {
     setShowFilters(false)
     setSearching(true)
@@ -83,6 +91,7 @@ export default function Search() {
       technologies: selectedTechnologies,
       language: selectedLanguage,
     })
+    onSetLastSearch(queryString)
     const { data } = await api.get(`/content/getAll?${queryString}`)
 
     setItems(data)
@@ -106,14 +115,11 @@ export default function Search() {
           <SearchButton disabled={searching} onClick={onSearch}>
             {!searching ? 'Search' : 'Searching...'}
           </SearchButton>
-          {!!items.length &&
-            !showFilters &&
-            (setSelectedLanguage || selectedLevel || !!selectedTechnologies.length) && (
-              <div>
-                <strong>Result from:</strong> {selectedLanguage}, {selectedLevel}{' '}
-                {selectedTechnologies.join(', ')}
-              </div>
-            )}
+          {!!items.length && !showFilters && lastSearch && (
+            <div>
+              <strong>Result from:</strong> {lastSearch}
+            </div>
+          )}
           {showFilters && (
             <Filters>
               <div>languages</div>
