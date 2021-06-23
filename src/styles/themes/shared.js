@@ -2,7 +2,7 @@ const DEFAULT_TRANSITION = 'linear'
 
 const createTransition = (element, type = DEFAULT_TRANSITION) => `${element} 400ms ${type}`
 
-const theme = {
+const sharedTheme = {
   fonts: {
     type: {
       primary: 'Open Sans',
@@ -14,15 +14,8 @@ const theme = {
       bolder: 800,
     },
   },
-  colors: {
-    primary: '#363537',
-    secondary: '#6A7FDB',
-    black: '#010101', // #272727
-    white: '#f7f8ff',
-    silver: '#DADADE',
-    success: '#5CF590',
-    warning: '#FF9141',
-    danger: '#FF4141',
+  radius: {
+    default: '16px',
   },
   sizes: {
     xxs: '4px',
@@ -39,6 +32,12 @@ const theme = {
       return element.map((e) => createTransition(e, type)).join(', ')
     },
   },
+  animations: {
+    appears: (name) => `@keyframes ${name} {
+      from { opacity: 0%; }
+      to { opacity: 100%; }
+    }`,
+  },
 }
 
-export default theme
+export default sharedTheme
