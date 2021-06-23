@@ -1,6 +1,8 @@
-import { technologies, levels, mock, languages } from 'helpers'
+import { technologies, levels, languages } from 'helpers'
 import { useState } from 'react'
+import api from 'services/api'
 import styled from 'styled-components'
+import buildQueryString from 'utils/buildQueryString'
 
 import Results from './Results'
 
@@ -36,7 +38,18 @@ const SearchButton = styled.button`
   width: 100px;
 `
 
-const Filters = styled.div``
+const Main = styled.div`
+  position: relative;
+`
+
+const Filters = styled.div`
+  position: absolute;
+  left: 0;
+  width: 100%;
+  z-index: 2;
+  border: solid ${({ theme }) => theme.colors.silver} 1px;
+  background: ${({ theme }) => theme.colors.white};
+`
 
 const Tags = styled.div`
   width: 100%;
@@ -71,45 +84,29 @@ export default function Search() {
     return setSelectedTechnologies((p) => p.filter((x) => x !== language))
   }
 
-  const onSearch = () => {
+  const onSearch = async () => {
+    setShowFilters(false)
     setSearching(true)
 
-    const hasLevel = !!selectedLevel
-    const hasTechnology = !!selectedTechnologies.length
+    const queryString = buildQueryString({
+      title: searchText,
+      // link: searchText,
+      level: selectedLevel,
+      technologies: selectedTechnologies,
+      language: selectedLanguage,
+    })
+    const { data } = await api.get(`/content/getAll?${queryString}`)
 
-    if (!hasLevel && !hasTechnology) {
-      return setTimeout(() => {
-        setItems(mock)
-        setSearching(false)
-      }, 1000)
-    }
+    setItems(data)
 
-    const filtred = mock.reduce((acc, curr) => {
-      const t = (x) => String(x).toLowerCase()
-
-      const hasText = t(curr.link).includes(t(searchText)) || t(curr.title).includes(t(searchText))
-      const isSameLanguage = curr.language === selectedLanguage
-      const isSameLevel = curr.level === selectedLevel
-      const includedTechnologies = selectedTechnologies.some((x) => curr.languages.includes(x))
-
-      if (isSameLevel || includedTechnologies || isSameLanguage || hasText) {
-        acc.push(curr)
-      }
-
-      return acc
-    }, [])
-
-    setTimeout(() => {
-      setItems(filtred)
-      setSearching(false)
-    }, 1000)
+    setSearching(false)
   }
 
   return (
     <Wrapper>
       <Content>
         <Title>Days Of Code</Title>
-        <div>
+        <Main>
           <FiltersButton onClick={() => setShowFilters((p) => !p)}>
             {showFilters ? 'Hide' : 'Show'} filters
           </FiltersButton>
@@ -121,47 +118,55 @@ export default function Search() {
           <SearchButton disabled={searching} onClick={onSearch}>
             {!searching ? 'Search' : 'Searching...'}
           </SearchButton>
-        </div>
-        {showFilters && (
-          <Filters>
-            <div>languages</div>
-            <Tags>
-              {languages.map((lang) => (
-                <Tag
-                  key={lang}
-                  onClick={() => setSelectedLanguage(lang)}
-                  active={selectedLanguage === lang}
-                >
-                  {lang}
-                </Tag>
-              ))}
-            </Tags>
-            <div>technologies</div>
-            <Tags>
-              {technologies.map((tech) => (
-                <Tag
-                  key={tech}
-                  onClick={() => onSelectLanguage(tech)}
-                  active={selectedTechnologies.includes(tech)}
-                >
-                  {tech}
-                </Tag>
-              ))}
-            </Tags>
-            <div>Level</div>
-            <Tags>
-              {levels.map((level) => (
-                <Tag
-                  key={level}
-                  onClick={() => setSelectedLevel((p) => (p === level ? undefined : level))}
-                  active={selectedLevel === level}
-                >
-                  {level}
-                </Tag>
-              ))}
-            </Tags>
-          </Filters>
-        )}
+          {!!items.length &&
+            !showFilters &&
+            (setSelectedLanguage || selectedLevel || !!selectedTechnologies.length) && (
+              <div>
+                <strong>Result from:</strong> {selectedLanguage}, {selectedLevel}{' '}
+                {selectedTechnologies.join(', ')}
+              </div>
+            )}
+          {showFilters && (
+            <Filters>
+              <div>languages</div>
+              <Tags>
+                {languages.map((lang) => (
+                  <Tag
+                    key={lang}
+                    onClick={() => setSelectedLanguage((p) => (p === lang ? undefined : lang))}
+                    active={selectedLanguage === lang}
+                  >
+                    {lang}
+                  </Tag>
+                ))}
+              </Tags>
+              <div>technologies</div>
+              <Tags>
+                {technologies.map((tech) => (
+                  <Tag
+                    key={tech}
+                    onClick={() => onSelectLanguage(tech)}
+                    active={selectedTechnologies.includes(tech)}
+                  >
+                    {tech}
+                  </Tag>
+                ))}
+              </Tags>
+              <div>Level</div>
+              <Tags>
+                {levels.map((level) => (
+                  <Tag
+                    key={level}
+                    onClick={() => setSelectedLevel((p) => (p === level ? undefined : level))}
+                    active={selectedLevel === level}
+                  >
+                    {level}
+                  </Tag>
+                ))}
+              </Tags>
+            </Filters>
+          )}
+        </Main>
 
         <Results list={items} />
       </Content>

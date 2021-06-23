@@ -56,11 +56,11 @@ export default function Result({ list }) {
       {list.map((item) => (
         <Item key={item.id}>
           <Actions>
-            <div onClick={() => onLike(item)}>Gostei</div>
-            <div onClick={() => onReport(item)}>Denunciar</div>
+            <div onClick={() => onLike(item)}>Like</div>
+            <div onClick={() => onReport(item)}>Report</div>
           </Actions>
           <Learned>
-            <div onClick={() => onLearn(item)}>Aprendi</div>
+            <div onClick={() => onLearn(item)}>Learned</div>
           </Learned>
           <Title target="_blank" href={item.link}>
             <Link>{item.link}</Link>

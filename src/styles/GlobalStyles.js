@@ -21,12 +21,18 @@ export default createGlobalStyle`
     box-sizing: border-box;
   }
 
+  button {
+    cursor: pointer;
+  }
+
   input,
   textarea,
   select {
-    font-family: 'Open Sans';
-    font-size: 1rem;
+    /* font-family: 'Open Sans';
+    font-size: 1rem; */
+    width: 100%;
   }
+
   ::-webkit-scrollbar {
     width: 8px;
   }

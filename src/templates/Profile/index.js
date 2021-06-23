@@ -1,27 +1,7 @@
+import { Modal } from 'components'
 import { technologies, generateRandomNumber, languages, levels } from 'helpers'
 import { useState } from 'react'
 import styled from 'styled-components'
-
-const Overlay = styled.div`
-  height: 100vh;
-  width: 100%;
-  background: rgba(0, 0, 0, 0.7);
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 999;
-`
-
-const Modal = styled.div`
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background: white;
-  width: 100%;
-  max-width: 500px;
-  padding: ${({ theme }) => `${theme.sizes.sm} ${theme.sizes.lg}`};
-`
 
 const Tags = styled.div`
   width: 100%;
@@ -76,43 +56,40 @@ export default function Profile({ isOpen, onClose }) {
   if (!isOpen) return null
 
   return (
-    <Overlay>
-      <Modal>
-        <button onClick={onClose}>Close</button>
-        <h1>Profile</h1>
-        <h3>My Skills</h3>
-        <Tabs>
-          {Object.values(tabs).map((t) => (
-            <Tab onClick={() => setCurrentTab(t)} active={t === currentTab} key={t}>
-              {t}
-            </Tab>
+    <Modal isOpen={isOpen} onClose={onClose}>
+      <h1>Profile</h1>
+      <h3>My Skills</h3>
+      <Tabs>
+        {Object.values(tabs).map((t) => (
+          <Tab onClick={() => setCurrentTab(t)} active={t === currentTab} key={t}>
+            {t}
+          </Tab>
+        ))}
+      </Tabs>
+      <Tags>
+        {currentTab === tabs.language &&
+          languages.map((l) => (
+            <Tag key={l} percentage={Math.trunc(generateRandomNumber(1, 100))}>
+              {l}
+            </Tag>
           ))}
-        </Tabs>
-        <Tags>
-          {currentTab === tabs.language &&
-            languages.map((l) => (
-              <Tag key={l} percentage={Math.trunc(generateRandomNumber(1, 100))}>
-                {l}
-              </Tag>
-            ))}
-        </Tags>
-        <Tags>
-          {currentTab === tabs.level &&
-            levels.map((l) => (
-              <Tag key={l} percentage={Math.trunc(generateRandomNumber(1, 100))}>
-                {l}
-              </Tag>
-            ))}
-        </Tags>
-        <Tags>
-          {currentTab === tabs.technology &&
-            technologies.map((l) => (
-              <Tag key={l} percentage={Math.trunc(generateRandomNumber(1, 100))}>
-                {l}
-              </Tag>
-            ))}
-        </Tags>
-      </Modal>
-    </Overlay>
+      </Tags>
+      <Tags>
+        {currentTab === tabs.level &&
+          levels.map((l) => (
+            <Tag key={l} percentage={Math.trunc(generateRandomNumber(1, 100))}>
+              {l}
+            </Tag>
+          ))}
+      </Tags>
+      <Tags>
+        {currentTab === tabs.technology &&
+          technologies.map((l) => (
+            <Tag key={l} percentage={Math.trunc(generateRandomNumber(1, 100))}>
+              {l}
+            </Tag>
+          ))}
+      </Tags>
+    </Modal>
   )
 }
