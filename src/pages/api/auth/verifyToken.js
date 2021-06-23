@@ -7,12 +7,23 @@ async function request(req, res, { token }) {
   try {
     const { _id } = await decodeToken(token)
 
-    const data = await userCollection.findOne({ _id })
+    const data = await userCollection.findOne({ _id }).populate('learnings')
 
-    const { nickname } = data
+    const { nickname, learnings } = data
     const refreshedToken = await generateToken({ _id, nickname })
 
-    return res.status(200).send({ token: refreshedToken, user: data })
+    const counts = learnings.reduce((acc, curr) => {
+      curr.technologies.map((tech) => {
+        if (acc[tech]) {
+          acc[tech] = acc[tech] + 1
+        } else {
+          acc[tech] = 1
+        }
+      })
+      return acc
+    }, {})
+
+    return res.status(200).send({ token: refreshedToken, user: { ...data.toObject(), counts } })
   } catch (error) {
     return interceptLog(req, res, error)
   }

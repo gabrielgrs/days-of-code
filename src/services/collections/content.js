@@ -1,5 +1,6 @@
 import { languages, levels, technologies } from 'helpers'
 import { Schema, model, models } from 'mongoose'
+require('./user')
 
 const schema = new Schema(
   {

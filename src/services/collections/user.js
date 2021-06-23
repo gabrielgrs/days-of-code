@@ -1,4 +1,5 @@
 import { Schema, model, models } from 'mongoose'
+require('./content')
 
 const schema = new Schema(
   {
