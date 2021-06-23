@@ -1,18 +1,25 @@
-import { Fragment, useContext } from 'react'
-import { AuthContext } from 'contexts/AuthContext'
+import { Fragment } from 'react'
 import styled from 'styled-components'
+import useAuth from 'hooks/useAuth'
+import { Button, Icon } from 'components'
 
 const Results = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: ${({ theme }) => theme.sizes.sm};
+  margin-top: ${({ theme }) => theme.sizes.sm};
 `
 
 const Item = styled.div`
   width: 100%;
-  border: solid black 2px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  flex-direction: column;
+  border-bottom: solid ${({ theme }) => theme.colors.silver} 1px;
   position: relative;
+  padding: ${({ theme }) => theme.sizes.xs} 0;
 `
 
 const Base = styled.div`
@@ -33,6 +40,8 @@ const Base = styled.div`
 
 const Actions = styled(Base)`
   top: 4px;
+  display: flex;
+  align-items: center;
 `
 
 const Learned = styled(Base)`
@@ -41,15 +50,17 @@ const Learned = styled(Base)`
 
 const Link = styled.div`
   font-size: 0.8rem;
-  color: gray;
+  color: ${({ theme }) => theme.colors.secondary};
 `
 
 const Title = styled.a`
-  color: blue;
+  color: ${({ theme }) => theme.colors.primary};
+  text-align: left;
+  font-size: 1.2rem;
 `
 
-export default function Result({ list, onLike, onLearn, onReport }) {
-  const { user, isAuthenticated } = useContext(AuthContext)
+export default function Result({ list, totalRecords, onLike, onLearn, onReport, onShowMore }) {
+  const { user, isAuthenticated } = useAuth()
 
   return (
     <Results>
@@ -58,9 +69,11 @@ export default function Result({ list, onLike, onLearn, onReport }) {
           {isAuthenticated && (
             <Fragment>
               <Actions>
-                <div onClick={() => onLike(item._id)}>
-                  {item.likes.includes(user._id) ? 'Unlike' : 'Like'}
-                </div>
+                <Icon
+                  name="heart"
+                  color={item.likes.includes(user._id) ? 'black' : 'danger'}
+                  onClick={() => onLike(item._id)}
+                />
                 <div onClick={() => onReport(item._id)}>Report</div>
               </Actions>
               <Learned>
@@ -79,6 +92,7 @@ export default function Result({ list, onLike, onLearn, onReport }) {
           </div>
         </Item>
       ))}
+      {totalRecords > list.length && <Button onClick={onShowMore}>Show more</Button>}
     </Results>
   )
 }

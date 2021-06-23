@@ -1,4 +1,4 @@
-import { Modal, TagsContainer, Tag } from 'components'
+import { Button, Modal, TagsContainer, Tag } from 'components'
 import { languages, levels, technologies } from 'helpers'
 import { useForm } from 'react-hook-form'
 import api from 'services/api'
@@ -89,12 +89,12 @@ export default function Create({ isOpen, onClose }) {
             </Tag>
           ))}
         </TagsContainer>
-        <button disabled={formState.isSubmitting} onClick={() => reset()}>
+        <Button disabled={formState.isSubmitting} onClick={() => reset()}>
           Reset
-        </button>
-        <button disabled={formState.isSubmitting} type="submit">
+        </Button>
+        <Button disabled={formState.isSubmitting} type="submit">
           Submit
-        </button>
+        </Button>
       </form>
     </Modal>
   )

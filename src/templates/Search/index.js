@@ -1,10 +1,10 @@
-import { Tag, TagsContainer } from 'components'
-import { technologies, levels, languages } from 'helpers'
 import { useState } from 'react'
+import { Button } from 'components'
 import api from 'services/api'
 import styled from 'styled-components'
 import buildQueryString from 'utils/buildQueryString'
 
+import Filters from './Filters'
 import Results from './Results'
 
 const Wrapper = styled.div`
@@ -28,13 +28,20 @@ const Title = styled.h1``
 
 const SearchInput = styled.input`
   width: 300px;
+  color: ${({ theme }) => theme.colors.black};
+  background: ${({ theme }) => theme.colors.white};
+  border: solid ${({ theme }) => theme.colors.silver} 1px;
+
+  &:focus {
+    border: solid ${({ theme }) => theme.colors.black} 1px;
+  }
 `
 
-const FiltersButton = styled.button`
+const FiltersButton = styled(Button)`
   width: 100px;
 `
 
-const SearchButton = styled.button`
+const SearchButton = styled(Button)`
   width: 100px;
 `
 
@@ -42,17 +49,12 @@ const Main = styled.div`
   position: relative;
 `
 
-const Filters = styled.div`
-  position: absolute;
-  left: 0;
-  width: 100%;
-  z-index: 2;
-  border: solid ${({ theme }) => theme.colors.silver} 1px;
-  background: ${({ theme }) => theme.colors.white};
-`
+const ITEMS_PER_PAGE = 10
 
 export default function Search() {
   const [items, setItems] = useState([])
+  const [totalRecords, setTotalRecords] = useState(0)
+  const [searchLimit, setSearchLimit] = useState(0)
   const [showFilters, setShowFilters] = useState(false)
   const [searchText, setSearchText] = useState(undefined)
   const [lastSearch, setLastSearch] = useState(undefined)
@@ -61,7 +63,7 @@ export default function Search() {
   const [selectedTechnologies, setSelectedTechnologies] = useState([])
   const [searching, setSearching] = useState(false)
 
-  const onSelectLanguage = (language) => {
+  const onSelectTechnology = (language) => {
     if (!selectedTechnologies.includes(language))
       return setSelectedTechnologies((p) => [...p, language])
     return setSelectedTechnologies((p) => p.filter((x) => x !== language))
@@ -80,7 +82,7 @@ export default function Search() {
     setLastSearch(formatted)
   }
 
-  const onSearch = async () => {
+  const onSearch = async (limit = ITEMS_PER_PAGE) => {
     setShowFilters(false)
     setSearching(true)
 
@@ -90,13 +92,23 @@ export default function Search() {
       level: selectedLevel,
       technologies: selectedTechnologies,
       language: selectedLanguage,
+      limit,
     })
+
+    debugger
+
     onSetLastSearch(queryString)
-    const { data } = await api.get(`/content/getAll?${queryString}`)
+    const { data, headers } = await api.get(`/content/getAll?${queryString}`)
 
     setItems(data)
+    setTotalRecords(+headers['x-total-records'])
 
     setSearching(false)
+  }
+
+  const onShowMore = () => {
+    setSearchLimit((p) => p + ITEMS_PER_PAGE)
+    onSearch(searchLimit + ITEMS_PER_PAGE)
   }
 
   return (
@@ -112,7 +124,7 @@ export default function Search() {
             value={searchText}
             onChange={({ target }) => setSearchText(target.value)}
           />
-          <SearchButton disabled={searching} onClick={onSearch}>
+          <SearchButton disabled={searching} onClick={() => onSearch()}>
             {!searching ? 'Search' : 'Searching...'}
           </SearchButton>
           {!!items.length && !showFilters && lastSearch && (
@@ -120,49 +132,25 @@ export default function Search() {
               <strong>Result from:</strong> {lastSearch}
             </div>
           )}
-          {showFilters && (
-            <Filters>
-              <div>languages</div>
-              <TagsContainer>
-                {languages.map((lang) => (
-                  <Tag
-                    key={lang}
-                    onClick={() => setSelectedLanguage((p) => (p === lang ? undefined : lang))}
-                    active={selectedLanguage === lang}
-                  >
-                    {lang}
-                  </Tag>
-                ))}
-              </TagsContainer>
-              <div>technologies</div>
-              <TagsContainer>
-                {technologies.map((tech) => (
-                  <Tag
-                    key={tech}
-                    onClick={() => onSelectLanguage(tech)}
-                    active={selectedTechnologies.includes(tech)}
-                  >
-                    {tech}
-                  </Tag>
-                ))}
-              </TagsContainer>
-              <div>Level</div>
-              <TagsContainer>
-                {levels.map((level) => (
-                  <Tag
-                    key={level}
-                    onClick={() => setSelectedLevel((p) => (p === level ? undefined : level))}
-                    active={selectedLevel === level}
-                  >
-                    {level}
-                  </Tag>
-                ))}
-              </TagsContainer>
-            </Filters>
-          )}
+          <Filters
+            isOpen={showFilters}
+            selectedLanguage={selectedLanguage}
+            setSelectedLanguage={setSelectedLanguage}
+            onSelectTechnology={onSelectTechnology}
+            selectedTechnologies={selectedTechnologies}
+            selectedLevel={selectedLevel}
+            setSelectedLevel={setSelectedLevel}
+          />
         </Main>
 
-        <Results list={items} onLike={onLike} onLearn={onLearn} onReport={onReport} />
+        <Results
+          list={items}
+          onLike={onLike}
+          onLearn={onLearn}
+          onReport={onReport}
+          totalRecords={totalRecords}
+          onShowMore={onShowMore}
+        />
       </Content>
     </Wrapper>
   )

@@ -1,9 +1,9 @@
-import { useContext, useState } from 'react'
+import { useState } from 'react'
 import styled from 'styled-components'
 import { useForm } from 'react-hook-form'
-import { AuthContext } from 'contexts/AuthContext'
 import api from 'services/api'
-import { Modal } from 'components'
+import { Row, Column, Button, Modal } from 'components'
+import useAuth from 'hooks/useAuth'
 
 const Tabs = styled.div`
   margin: ${({ theme }) => `${theme.sizes.xs} 0 ${theme.sizes.md}`};
@@ -37,7 +37,7 @@ export default function Auth({ isOpen, onClose }) {
   const [isRegister, setIsRegister] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
 
-  const { onAuthenticate } = useContext(AuthContext)
+  const { onAuthenticate } = useAuth()
 
   const { register, handleSubmit, formState } = useForm()
 
@@ -77,9 +77,13 @@ export default function Auth({ isOpen, onClose }) {
             {showPassword ? 'hide' : 'show'}
           </PasswordDisplay>
         </div>
-        <button type="submit" disabled={formState.isSubmitting}>
-          {isRegister ? 'Register' : 'Login'}
-        </button>
+        <Row>
+          <Column size={12}>
+            <Button type="submit" disabled={formState.isSubmitting}>
+              {isRegister ? 'Register' : 'Login'}
+            </Button>
+          </Column>
+        </Row>
       </form>
     </Modal>
   )
