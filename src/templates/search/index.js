@@ -1,3 +1,4 @@
+import { Tag, TagsContainer } from 'components'
 import { technologies, levels, languages } from 'helpers'
 import { useState } from 'react'
 import api from 'services/api'
@@ -48,24 +49,6 @@ const Filters = styled.div`
   z-index: 2;
   border: solid ${({ theme }) => theme.colors.silver} 1px;
   background: ${({ theme }) => theme.colors.white};
-`
-
-const Tags = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: ${({ theme }) => theme.sizes.xs};
-`
-
-const Tag = styled.div`
-  cursor: pointer;
-  border: solid black 2px;
-  padding: ${({ theme }) => `${theme.sizes.xxs} ${theme.sizes.xs}`};
-  user-select: none;
-
-  background: ${({ active }) => (active ? 'black' : 'white')};
-  color: ${({ active }) => (active ? 'white' : 'black')};
 `
 
 export default function Search() {
@@ -134,7 +117,7 @@ export default function Search() {
           {showFilters && (
             <Filters>
               <div>languages</div>
-              <Tags>
+              <TagsContainer>
                 {languages.map((lang) => (
                   <Tag
                     key={lang}
@@ -144,9 +127,9 @@ export default function Search() {
                     {lang}
                   </Tag>
                 ))}
-              </Tags>
+              </TagsContainer>
               <div>technologies</div>
-              <Tags>
+              <TagsContainer>
                 {technologies.map((tech) => (
                   <Tag
                     key={tech}
@@ -156,9 +139,9 @@ export default function Search() {
                     {tech}
                   </Tag>
                 ))}
-              </Tags>
+              </TagsContainer>
               <div>Level</div>
-              <Tags>
+              <TagsContainer>
                 {levels.map((level) => (
                   <Tag
                     key={level}
@@ -168,7 +151,7 @@ export default function Search() {
                     {level}
                   </Tag>
                 ))}
-              </Tags>
+              </TagsContainer>
             </Filters>
           )}
         </Main>

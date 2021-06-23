@@ -1,26 +1,7 @@
-import { Modal } from 'components'
+import { Modal, TagsContainer, Tag } from 'components'
 import { languages, levels, technologies } from 'helpers'
 import { useForm } from 'react-hook-form'
 import api from 'services/api'
-import styled from 'styled-components'
-
-const Tags = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: ${({ theme }) => theme.sizes.xs};
-`
-
-const Tag = styled.div`
-  cursor: pointer;
-  border: solid black 2px;
-  padding: ${({ theme }) => `${theme.sizes.xxs} ${theme.sizes.xs}`};
-  user-select: none;
-
-  background: ${({ active }) => (active ? 'black' : 'white')};
-  color: ${({ active }) => (active ? 'white' : 'black')};
-`
 
 export default function Create({ isOpen, onClose }) {
   const { register, handleSubmit, watch, setValue, reset, formState } = useForm()
@@ -66,7 +47,7 @@ export default function Create({ isOpen, onClose }) {
           />
         </div>
         <div>languages</div>
-        <Tags>
+        <TagsContainer>
           {languages.map((lang) => (
             <Tag
               key={lang}
@@ -76,9 +57,9 @@ export default function Create({ isOpen, onClose }) {
               {lang}
             </Tag>
           ))}
-        </Tags>
+        </TagsContainer>
         <div>technologies</div>
-        <Tags>
+        <TagsContainer>
           {technologies.map((tech) => (
             <Tag
               key={tech}
@@ -95,9 +76,9 @@ export default function Create({ isOpen, onClose }) {
               {tech}
             </Tag>
           ))}
-        </Tags>
+        </TagsContainer>
         <div>Level</div>
-        <Tags>
+        <TagsContainer>
           {levels.map((level) => (
             <Tag
               key={level}
@@ -107,7 +88,7 @@ export default function Create({ isOpen, onClose }) {
               {level}
             </Tag>
           ))}
-        </Tags>
+        </TagsContainer>
         <button disabled={formState.isSubmitting} onClick={() => reset()}>
           Reset
         </button>

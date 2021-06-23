@@ -9,6 +9,8 @@ export default createGlobalStyle`
     scroll-behavior: smooth;
     background: ${({ theme }) => theme.colors.white};
     color: ${({ theme }) => theme.colors.black};
+
+    
   }
 
   a {
@@ -18,6 +20,7 @@ export default createGlobalStyle`
 
   * {
     box-sizing: border-box;
+    transition: ${({ theme }) => theme.helpers.transitions(['background', 'opacity', 'color'])};
   }
 
   button {

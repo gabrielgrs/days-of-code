@@ -17,7 +17,7 @@ const theme = {
   colors: {
     primary: '#363537',
     secondary: '#6A7FDB',
-    black: '#010101',
+    black: '#010101', // #272727
     white: '#f7f8ff',
     silver: '#DADADE',
     success: '#5CF590',
