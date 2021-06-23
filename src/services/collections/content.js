@@ -8,7 +8,8 @@ const schema = new Schema(
     technologies: [{ type: String, required: true, role: technologies }],
     level: { type: String, required: true, role: levels },
     language: { type: String, required: true, role: languages },
-    // author: { type: Schema.Types.ObjectId, ref: 'user', required: true },
+    creator: { type: Schema.Types.ObjectId, ref: 'user', required: true },
+    likes: [{ type: Schema.Types.ObjectId, ref: 'user' }],
   },
   {
     timestamps: { createdAt: 'createdAt', updatedAt: 'updatedAt' },

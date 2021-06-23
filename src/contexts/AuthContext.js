@@ -11,33 +11,33 @@ export function AuthProvider({ children }) {
     if (!_token) throw Error(`Token is required`)
     if (!_user) throw Error(`User is required`)
 
-    localStorage.setItem('token', _token)
+    localStorage.setItem('@doc:token', _token)
     setUser(_user)
   }, [])
 
-  // const onVerifyToken = useCallback(
-  //   async (token) => {
-  //     setLoading(true)
+  const onVerifyToken = useCallback(
+    async (token) => {
+      setLoading(true)
 
-  //     if (!token) {
-  //       setUser(undefined)
-  //       return setLoading(false)
-  //     }
+      if (!token) {
+        setUser(undefined)
+        return setLoading(false)
+      }
 
-  //     const { data } = await api.post('/auth/verifyToken')
+      const { data } = await api.post('/auth/verifyToken')
 
-  //     if (data?.token && data?.user) {
-  //       onAuthenticate(data.token, data.user)
-  //     }
-  //     return setLoading(false)
-  //   },
-  //   [onAuthenticate]
-  // )
+      if (data?.token && data?.user) {
+        onAuthenticate(data.token, data.user)
+      }
+      return setLoading(false)
+    },
+    [onAuthenticate]
+  )
 
-  // useEffect(() => {
-  //   const token = localStorage.getItem('token')
-  //   onVerifyToken(token)
-  // }, [onVerifyToken])
+  useEffect(() => {
+    const token = localStorage.getItem('@doc:token')
+    onVerifyToken(token)
+  }, [onVerifyToken])
 
   if (loading) return 'Loading....'
 

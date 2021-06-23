@@ -1,4 +1,3 @@
-import { darken } from 'polished'
 import { createGlobalStyle } from 'styled-components'
 
 export default createGlobalStyle`
@@ -8,7 +7,7 @@ export default createGlobalStyle`
     margin: 0;
     font-family: 'Open Sans';
     scroll-behavior: smooth;
-    background: ${({ theme }) => darken(0.001, theme.colors.silver)};
+    background: ${({ theme }) => theme.colors.white};
     color: ${({ theme }) => theme.colors.black};
   }
 

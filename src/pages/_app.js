@@ -7,6 +7,8 @@ import theme from 'styles/theme'
 import { AuthProvider } from 'contexts/AuthContext'
 
 function MyApp({ Component, pageProps }) {
+  if (!process.browser) return null
+
   return (
     <Fragment>
       <Head>

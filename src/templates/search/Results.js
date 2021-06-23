@@ -1,3 +1,5 @@
+import { AuthContext } from 'contexts/AuthContext'
+import { useContext } from 'react'
 import styled from 'styled-components'
 
 const Results = styled.div`
@@ -46,21 +48,23 @@ const Title = styled.a`
   color: blue;
 `
 
-export default function Result({ list }) {
-  const onLike = ({ id, title }) => alert(`Item (${id}-${title}) liked with sucess`)
-  const onReport = ({ id, title }) => alert(`Item (${id}-${title}) reported with sucess`)
-  const onLearn = ({ id, title }) => alert(`Item (${id}-${title}) learnedWithSuccess with sucess`)
+export default function Result({ list, onLike, onLearn, onReport }) {
+  const { user } = useContext(AuthContext)
 
   return (
     <Results>
       {list.map((item) => (
-        <Item key={item.id}>
+        <Item key={item._id}>
           <Actions>
-            <div onClick={() => onLike(item)}>Like</div>
-            <div onClick={() => onReport(item)}>Report</div>
+            <div onClick={() => onLike(item._id)}>
+              {item.likes.includes(user._id) ? 'Unlike' : 'Like'}
+            </div>
+            <div onClick={() => onReport(item._id)}>Report</div>
           </Actions>
           <Learned>
-            <div onClick={() => onLearn(item)}>Learned</div>
+            <div onClick={() => onLearn(item._id)}>
+              {user.learnings.includes(item._id) ? 'Unmark' : 'Mark'} as learned
+            </div>
           </Learned>
           <Title target="_blank" href={item.link}>
             <Link>{item.link}</Link>

@@ -1,6 +1,7 @@
 import { Modal } from 'components'
+import { AuthContext } from 'contexts/AuthContext'
 import { technologies, generateRandomNumber, languages, levels } from 'helpers'
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import styled from 'styled-components'
 
 const Tags = styled.div`
@@ -53,11 +54,13 @@ export default function Profile({ isOpen, onClose }) {
 
   const [currentTab, setCurrentTab] = useState(tabs.technology)
 
+  const { user = {} } = useContext(AuthContext)
+
   if (!isOpen) return null
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
-      <h1>Profile</h1>
+      <h1>Profile from {user.email}</h1>
       <h3>My Skills</h3>
       <Tabs>
         {Object.values(tabs).map((t) => (

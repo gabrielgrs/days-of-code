@@ -7,7 +7,6 @@ import buildQueryString from 'utils/buildQueryString'
 import Results from './Results'
 
 const Wrapper = styled.div`
-  background: white;
   height: 100vh;
   width: 100%;
   display: flex;
@@ -83,6 +82,12 @@ export default function Search() {
       return setSelectedTechnologies((p) => [...p, language])
     return setSelectedTechnologies((p) => p.filter((x) => x !== language))
   }
+
+  const onLike = (contentId) => api.put(`/content/like?${buildQueryString({ contentId })}`)
+
+  const onLearn = (contentId) => api.put(`/content/learn?${buildQueryString({ contentId })}`)
+
+  const onReport = (contentId) => alert(`Under construction - ${contentId}`)
 
   const onSearch = async () => {
     setShowFilters(false)
@@ -168,7 +173,7 @@ export default function Search() {
           )}
         </Main>
 
-        <Results list={items} />
+        <Results list={items} onLike={onLike} onLearn={onLearn} onReport={onReport} />
       </Content>
     </Wrapper>
   )
