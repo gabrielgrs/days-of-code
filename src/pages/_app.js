@@ -1,10 +1,12 @@
 import 'styles/globals.css'
 import { Fragment } from 'react'
-import { ThemeProvider } from 'styled-components'
+
 import Head from 'next/head'
 import GlobalStyles from 'styles/GlobalStyles'
-import theme from 'styles/theme'
+
+import Navbar from 'templates/Navbar'
 import { AuthProvider } from 'contexts/AuthContext'
+import { ThemeProvider } from 'contexts/ThemeContext'
 
 function MyApp({ Component, pageProps }) {
   if (!process.browser) return null
@@ -16,12 +18,13 @@ function MyApp({ Component, pageProps }) {
         <meta name="description" content="Days of Code ~" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <AuthProvider>
-        <ThemeProvider theme={theme}>
+      <ThemeProvider>
+        <AuthProvider>
           <GlobalStyles />
+          <Navbar />
           <Component {...pageProps} />
-        </ThemeProvider>
-      </AuthProvider>
+        </AuthProvider>
+      </ThemeProvider>
     </Fragment>
   )
 }

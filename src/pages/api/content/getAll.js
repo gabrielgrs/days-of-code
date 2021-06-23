@@ -17,8 +17,14 @@ function createFilters(query) {
 
 async function request(req, res) {
   try {
-    const query = createFilters(req.query)
-    const data = await contentCollection.find(query)
+    const { limit, ...rest } = req.query
+    const querySearch = createFilters(rest)
+
+    const data = await contentCollection.find(querySearch).limit(+limit)
+    const totalRecords = await contentCollection.find(querySearch).countDocuments()
+
+    res.setHeader('x-total-records', totalRecords)
+
     return res.status(200).send(data)
   } catch (error) {
     return res.status(500).send(error)

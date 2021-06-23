@@ -1,7 +1,11 @@
 import { useState, createContext, useCallback, useEffect } from 'react'
 import api from 'services/api'
 
-export const AuthContext = createContext({})
+export const AuthContext = createContext({
+  loading: false,
+  user: undefined,
+  isAuthenticated: false,
+})
 
 export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(false)
