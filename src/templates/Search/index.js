@@ -53,15 +53,20 @@ const SearchInput = styled.input`
   }
 `
 
-const FiltersButton = styled.button`
+const BaseButton = styled.button`
   width: 80px;
   height: 44px;
+  background: ${({ theme }) => theme.colors.white};
+  color: ${({ theme }) => theme.colors.black};
+  border: none;
+  border: solid ${({ theme }) => theme.colors.black} 1px;
 `
 
-const SearchButton = styled.button`
+const FiltersButton = styled(BaseButton)``
+
+const SearchButton = styled(BaseButton)`
+  border-radius: ${({ theme }) => `0px ${theme.radius.default} ${theme.radius.default} 0px`};
   cursor: ${({ searching }) => searching && 'not-allowed'};
-  width: 80px;
-  height: 44px;
   opacity: ${({ searching }) => searching && 0.5};
 `
 
