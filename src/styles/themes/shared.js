@@ -25,7 +25,7 @@ const sharedTheme = {
     hard: '0px 0px 10px 0px rgba(0,0,0,0.50)',
     colored: (color) => `0px 1px 10px 0px ${rgba(color, 0.3)}`,
   },
-  opacities: {
+  opacity: {
     default: 0.7,
   },
   sizes: {

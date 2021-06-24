@@ -2,7 +2,7 @@ import { useState } from 'react'
 import styled from 'styled-components'
 import { useForm } from 'react-hook-form'
 import api from 'services/api'
-import { Row, Column, Button, Modal, Textfield } from 'components'
+import { Row, Column, Button, Modal, Textfield, Grid } from 'components'
 import useAuth from 'hooks/useAuth'
 
 const Tabs = styled.div`
@@ -77,13 +77,11 @@ export default function Auth({ isOpen, onClose }) {
             {showPassword ? 'hide' : 'show'}
           </PasswordDisplay>
         </div>
-        <Row>
-          <Column size={12}>
-            <Button type="submit" disabled={formState.isSubmitting}>
-              {isRegister ? 'Register' : 'Login'}
-            </Button>
-          </Column>
-        </Row>
+        <div>
+          <Button fullWidth type="submit" disabled={formState.isSubmitting}>
+            {isRegister ? 'Register' : 'Login'}
+          </Button>
+        </div>
       </form>
     </Modal>
   )

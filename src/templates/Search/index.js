@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Icon } from 'components'
+import { Icon, Logo } from 'components'
 import api from 'services/api'
 import styled from 'styled-components'
 import buildQueryString from 'utils/buildQueryString'
@@ -7,21 +7,60 @@ import buildQueryString from 'utils/buildQueryString'
 import Filters from './Filters'
 import Results from './Results'
 
-const Wrapper = styled.div``
+const Wrapper = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`
 
 const Content = styled.div``
 
-const Title = styled.h1``
+const InputWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: ${({ theme }) => theme.sizes.xxs};
+`
 
-const InputWrapper = styled.div``
+const SearchInput = styled.input`
+  font-size: 1.1rem;
+  width: 200px;
+  background: none;
+  border: none;
+  border-bottom: solid ${({ theme }) => theme.colors.silver} 2px;
 
-const SearchInput = styled.input``
+  &:focus {
+    outline: none;
+    border: none;
+    border-bottom: solid ${({ theme }) => theme.colors.black} 2px;
+  }
+`
 
-const BaseButton = styled.button``
+const BaseButton = styled.button`
+  background: none;
+  border: none;
+  font-size: 1.1rem;
+  width: 100px;
+`
 
 const FiltersButton = styled(BaseButton)``
 
-const SearchButton = styled(BaseButton)``
+const SearchButton = styled(BaseButton)`
+  display: flex;
+
+  &:before {
+    content: '{ ';
+  }
+
+  &:after {
+    content: ' }';
+  }
+`
 
 const Main = styled.div``
 
@@ -90,21 +129,22 @@ export default function Search() {
   return (
     <Wrapper>
       <Content>
-        <Title>Days Of Code</Title>
+        <Logo />
         <Main>
           <InputWrapper>
+            <Icon name="rightArrow" />
             <SearchInput
               placeholder="Type your search..."
               value={searchText}
               onKeyDown={({ code }) => code === 'Enter' && onSearch()}
               onChange={({ target }) => setSearchText(target.value)}
             />
-            <FiltersButton onClick={() => setShowFilters((p) => !p)}>
-              <Icon name="filters" height={28} />
-            </FiltersButton>
+            <FiltersButton onClick={() => setShowFilters((p) => !p)}>Filters</FiltersButton>
             <SearchButton searching={searching} onClick={() => onSearch()}>
-              <Icon name="search" height={28} />
+              {searching ? 'Searching...' : 'Search'}
             </SearchButton>
+          </InputWrapper>
+          <InputWrapper>
             {!!items.length && !showFilters && lastSearch && (
               <div>
                 <strong>Result from:</strong> {lastSearch}

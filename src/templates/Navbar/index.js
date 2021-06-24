@@ -8,9 +8,30 @@ import useAuth from 'hooks/useAuth'
 import useTheme from 'hooks/useTheme'
 import Icon from 'components/Icon'
 
-const Nav = styled.div``
+const Nav = styled.div`
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  border-top: solid ${({ theme }) => theme.colors.silver} 1px;
+  z-index: 1;
 
-const Section = styled.div``
+  & .icon {
+    transition: all 300ms linear;
+
+    &:hover {
+      transform: scale(1.2);
+    }
+  }
+`
+
+const Section = styled.div`
+  display: flex;
+  gap: ${({ theme }) => theme.sizes.sm};
+  padding: ${({ theme }) => `${theme.sizes.xs} ${theme.sizes.sm}`};
+`
 
 export default function Home() {
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false)

@@ -1,4 +1,4 @@
-import { Row, Column, Button, Modal, TagsContainer, Tag, Textfield } from 'components'
+import { Button, Modal, TagsContainer, Tag, Textfield } from 'components'
 import { languages, levels, technologies } from 'helpers'
 import { useForm } from 'react-hook-form'
 import api from 'services/api'
@@ -35,19 +35,19 @@ export default function Create({ isOpen, onClose }) {
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <Row>
-          <Column size={12}>
+        <div>
+          <div>
             <label>Title</label>
             <Textfield {...register('title', { required: true })} placeholder="some title" />
-          </Column>
-          <Column size={12}>
+          </div>
+          <div>
             <label>Link</label>
             <Textfield
               {...register('link', { required: true, validate: (v) => isValidLink(v) })}
               placeholder="https://sitefromtest.com/somecontent"
             />
-          </Column>
-          <Column size={12}>
+          </div>
+          <div>
             <label>languages</label>
             <TagsContainer>
               {languages.map((lang) => (
@@ -60,8 +60,8 @@ export default function Create({ isOpen, onClose }) {
                 </Tag>
               ))}
             </TagsContainer>
-          </Column>
-          <Column size={12}>
+          </div>
+          <div>
             <label>Technologies</label>
             <TagsContainer>
               {technologies.map((tech) => (
@@ -81,8 +81,8 @@ export default function Create({ isOpen, onClose }) {
                 </Tag>
               ))}
             </TagsContainer>
-          </Column>
-          <Column size={12}>
+          </div>
+          <div>
             <label>Level</label>
             <TagsContainer>
               {levels.map((level) => (
@@ -95,21 +95,21 @@ export default function Create({ isOpen, onClose }) {
                 </Tag>
               ))}
             </TagsContainer>
-          </Column>
-        </Row>
+          </div>
+        </div>
         <div style={{ margin: '16px 0' }} />
-        <Row>
-          <Column size={6}>
+        <div>
+          <div>
             <Button fullWidth disabled={formState.isSubmitting} onClick={() => reset()}>
               Reset
             </Button>
-          </Column>
-          <Column size={6}>
+          </div>
+          <div>
             <Button fullWidth disabled={formState.isSubmitting} type="submit">
               Submit
             </Button>
-          </Column>
-        </Row>
+          </div>
+        </div>
       </form>
     </Modal>
   )

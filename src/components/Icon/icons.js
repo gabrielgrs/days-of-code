@@ -9,6 +9,7 @@ const icons = {
   heart: boxIcons.Heart,
   filters: boxIcons.Filter,
   search: boxIcons.Search,
+  rightArrow: boxIcons.ArrowForward,
 }
 
 export default icons

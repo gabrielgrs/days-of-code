@@ -1,6 +1,30 @@
 import { createGlobalStyle } from 'styled-components'
 
 export default createGlobalStyle`
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+      &::before,
+      &::after {
+        box-sizing: inherit;
+    }
+    transition: ${({ theme }) =>
+      theme.helpers.transitions(['background', 'color', 'opacity', 'top', 'right', 'padding'])};
+    color: ${({ theme }) => theme.colors.black};
+  }
+
+  body {
+    font-family: 'Share Tech Mono';
+    background: ${({ theme }) => theme.colors.white};
+  }
+
+  button {
+    cursor: pointer;
+  }
+
   ::-webkit-scrollbar {
     width: 8px;
 
