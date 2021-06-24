@@ -2,13 +2,14 @@ import { useState } from 'react'
 import styled from 'styled-components'
 import { useForm } from 'react-hook-form'
 import api from 'services/api'
-import { Row, Column, Button, Modal, Textfield, Grid } from 'components'
+import { Row, Column, Button, Modal, Textfield } from 'components'
 import useAuth from 'hooks/useAuth'
 
 const Tabs = styled.div`
   margin: ${({ theme }) => `${theme.sizes.xs} 0 ${theme.sizes.md}`};
   display: flex;
   gap: ${({ theme }) => theme.sizes.xs};
+  font-size: 1.5rem;
 `
 
 const Tab = styled.div`
@@ -17,15 +18,8 @@ const Tab = styled.div`
   font-weight: ${({ active }) => active && '600'};
   padding: 0 ${({ theme }) => theme.sizes.xxs};
 
-  &::after {
-    content: ' ';
-    position: absolute;
-    width: 100%;
-    height: 3px;
-    background: ${({ theme, active }) => active && theme.colors.secondary};
-    bottom: -4px;
-    left: 0;
-  }
+  border-bottom: solid
+    ${({ theme, active }) => (active ? theme.colors.primary : theme.colors.white)} 4px;
 `
 
 const PasswordDisplay = styled.button`
@@ -64,24 +58,30 @@ export default function Auth({ isOpen, onClose }) {
             Register
           </Tab>
         </Tabs>
-        <div>
-          <Textfield {...register('email', { required: true })} placeholder="Type your email" />
-        </div>
-        <div>
-          <Textfield
-            {...register('password', { required: true })}
-            type={!showPassword && 'password'}
-            placeholder="Type your password"
-          />
-          <PasswordDisplay type="button" onClick={() => setShowPassword((p) => !p)}>
-            {showPassword ? 'hide' : 'show'}
-          </PasswordDisplay>
-        </div>
-        <div>
-          <Button fullWidth type="submit" disabled={formState.isSubmitting}>
-            {isRegister ? 'Register' : 'Login'}
-          </Button>
-        </div>
+        <Row>
+          <Column size={12}>
+            <Textfield {...register('email', { required: true })} placeholder="Type your email" />
+          </Column>
+          <Column size={12}>
+            <Textfield
+              {...register('password', { required: true })}
+              type={!showPassword && 'password'}
+              placeholder="Type your password"
+            />
+          </Column>
+          <Column size={12}>
+            <PasswordDisplay type="button" onClick={() => setShowPassword((p) => !p)}>
+              {showPassword ? 'hide' : 'show'}
+            </PasswordDisplay>
+          </Column>
+        </Row>
+        <Row>
+          <Column size={12}>
+            <Button fullWidth type="submit" disabled={formState.isSubmitting}>
+              {isRegister ? 'Register' : 'Login'}
+            </Button>
+          </Column>
+        </Row>
       </form>
     </Modal>
   )

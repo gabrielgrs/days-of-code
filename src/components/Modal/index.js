@@ -22,6 +22,8 @@ const ModalWrapper = styled.div`
   z-index: 11;
   border-radius: ${({ theme }) => theme.radius.default};
   padding: ${({ theme }) => theme.sizes.sm};
+  width: ${({ width }) => width};
+  max-width: 772px;
 
   animation: appears 500ms linear;
 
@@ -45,6 +47,7 @@ const CloseButton = styled.button`
   border-radius: 50px;
   border: none;
   box-shadow: ${({ theme }) => theme.shadows.colored(theme.colors.primary)};
+  background: ${({ theme }) => theme.colors.white};
 
   &:hover {
     top: -10px;
@@ -53,7 +56,7 @@ const CloseButton = styled.button`
   }
 `
 
-export default function Modal({ children, isOpen, onClose }) {
+export default function Modal({ children, isOpen, onClose, width }) {
   useEffect(() => {
     const onPressEscape = ({ code }) => code === 'Escape' && onClose()
     window.addEventListener('keydown', (e) => onPressEscape(e))
@@ -64,7 +67,7 @@ export default function Modal({ children, isOpen, onClose }) {
 
   return (
     <Overlay>
-      <ModalWrapper>
+      <ModalWrapper width={width || '500px'}>
         <CloseButton onClick={onClose}>
           <Icon name="close" height={28} />
         </CloseButton>

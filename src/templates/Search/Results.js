@@ -3,19 +3,45 @@ import styled from 'styled-components'
 import useAuth from 'hooks/useAuth'
 import { Button, Icon } from 'components'
 
-const Results = styled.div``
+const Results = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: ${({ theme }) => theme.sizes.sm};
+`
 
-const Item = styled.div``
+const Item = styled.div`
+  position: relative;
+  border-bottom: solid black 1px;
+`
 
-const Base = styled.div``
+const Base = styled.div`
+  position: absolute;
+  right: 0;
+  display: flex;
+  gap: ${({ theme }) => theme.sizes.xxs};
+`
 
-const Actions = styled(Base)``
+const Actions = styled(Base)`
+  top: 0;
+`
 
-const Learned = styled(Base)``
+const Learned = styled(Base)`
+  bottom: 0;
+`
 
-const Link = styled.div``
+const Link = styled.div`
+  font-size: 0.9rem;
+`
 
-const Title = styled.a``
+const Title = styled.a`
+  font-weight: ${({ theme }) => theme.fonts.weight.bold};
+`
+
+const About = styled.div`
+  width: 50%;
+  font-style: italic;
+`
 
 export default function Result({ list, totalRecords, onLike, onLearn, onReport, onShowMore }) {
   const { user, isAuthenticated } = useAuth()
@@ -41,13 +67,13 @@ export default function Result({ list, totalRecords, onLike, onLearn, onReport, 
               </Learned>
             </Fragment>
           )}
+          <Link>{item.link}</Link>
           <Title target="_blank" href={item.link}>
-            <Link>{item.link}</Link>
             {item.title}
           </Title>
-          <div>
+          <About>
             {item.level} - {item.technologies.join(',')} - {item.language}
-          </div>
+          </About>
         </Item>
       ))}
       {totalRecords > list.length && <Button onClick={onShowMore}>Show more</Button>}

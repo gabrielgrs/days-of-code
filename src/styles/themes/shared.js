@@ -17,7 +17,7 @@ const sharedTheme = {
     },
   },
   radius: {
-    default: '16px',
+    default: '4px',
   },
   shadows: {
     soft: '0px 0px 3px 0px rgba(0,0,0,0.30)',

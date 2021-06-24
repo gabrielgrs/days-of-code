@@ -8,24 +8,35 @@ const Wrapper = styled.h1`
   text-transform: uppercase;
   font-size: 3rem;
   margin: ${({ theme }) => theme.sizes.lg} 0;
-  text-align: center;
 
   * {
     transition: all 0.6s linear;
+    transition-delay: 0.5s;
   }
 
-  transition-delay: 0.5s;
+  @media screen and (max-width: 772px) {
+    padding-left: 20%;
+    font-size: 1.5rem;
+  }
 `
 
 const Left = styled.div`
   transition: all 0.6s cubic-bezier(0.555, -0.375, 0, 1.615);
-  transform: ${({ active }) => active && 'translateX(195px)'};
+  transform: ${({ active }) => active && 'translateX(205px)'};
+
+  @media screen and (max-width: 772px) {
+    transform: ${({ active }) => active && 'translateX(100px)'};
+  }
 `
 
 const Right = styled.div`
   transition: all 1.2s cubic-bezier(0.555, -0.375, 0, 1.615);
   text-indent: ${({ active }) => active && '-35px'};
   transform: ${({ active }) => active && 'translateX(-40px)'};
+
+  @media screen and (max-width: 772px) {
+    transform: ${({ active }) => active && 'translateX(0px)'};
+  }
 `
 
 const Bar = styled.div`

@@ -64,6 +64,11 @@ const SearchButton = styled(BaseButton)`
 
 const Main = styled.div``
 
+const ResultFrom = styled.div`
+  padding: ${({ theme }) => theme.sizes.sm} 0;
+  text-align: center;
+`
+
 const ITEMS_PER_PAGE = 10
 
 export default function Search() {
@@ -144,13 +149,11 @@ export default function Search() {
               {searching ? 'Searching...' : 'Search'}
             </SearchButton>
           </InputWrapper>
-          <InputWrapper>
-            {!!items.length && !showFilters && lastSearch && (
-              <div>
-                <strong>Result from:</strong> {lastSearch}
-              </div>
-            )}
-          </InputWrapper>
+          {!!items.length && !showFilters && lastSearch && (
+            <ResultFrom>
+              <strong>Result from:</strong> {lastSearch}
+            </ResultFrom>
+          )}
           <Filters
             isOpen={showFilters}
             selectedLanguage={selectedLanguage}

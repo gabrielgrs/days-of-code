@@ -12,8 +12,20 @@ export default createGlobalStyle`
         box-sizing: inherit;
     }
     transition: ${({ theme }) =>
-      theme.helpers.transitions(['background', 'color', 'opacity', 'top', 'right', 'padding'])};
+      theme.helpers.transitions([
+        'background',
+        'color',
+        'opacity',
+        'top',
+        'right',
+        'padding',
+        'border',
+      ])};
     color: ${({ theme }) => theme.colors.black};
+  }
+
+  a {
+    text-decoration: none;
   }
 
   body {
