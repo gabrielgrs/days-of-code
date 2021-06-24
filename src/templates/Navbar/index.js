@@ -8,24 +8,9 @@ import useAuth from 'hooks/useAuth'
 import useTheme from 'hooks/useTheme'
 import Icon from 'components/Icon'
 
-const Nav = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: ${({ theme }) => theme.sizes.sm};
-  gap: ${({ theme }) => theme.sizes.sm};
-  width: 100%;
-`
+const Nav = styled.div``
 
-export const Section = styled.div`
-  display: flex;
-  align-items: center;
-  height: 100%;
-  gap: ${({ theme }) => theme.sizes.sm};
-`
+const Section = styled.div``
 
 export default function Home() {
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false)

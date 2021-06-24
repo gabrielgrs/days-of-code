@@ -7,72 +7,23 @@ import buildQueryString from 'utils/buildQueryString'
 import Filters from './Filters'
 import Results from './Results'
 
-const Wrapper = styled.div`
-  height: 100vh;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`
+const Wrapper = styled.div``
 
-const Content = styled.div`
-  text-align: center;
-  width: 100%;
-  max-width: 992px;
-  display: flex;
-  flex-direction: column;
-  gap: ${({ theme }) => theme.sizes.xs};
-`
+const Content = styled.div``
 
-const Title = styled.h1`
-  color: ${({ theme }) => theme.colors.primary};
-  font-weight: ${({ theme }) => theme.fonts.weight.bold};
-  font-family: ${({ theme }) => theme.fonts.type.secondary};
-  font-size: 3em;
-`
+const Title = styled.h1``
 
-const InputWrapper = styled.div`
-  position: relative;
-`
+const InputWrapper = styled.div``
 
-const SearchInput = styled.input`
-  position: relative;
-  width: 100%;
-  max-width: 500px;
-  background: ${({ theme }) => theme.colors.white};
-  color: ${({ theme }) => theme.colors.black};
-  height: 44px;
-  padding-left: ${({ theme }) => theme.sizes.sm};
-  border: none;
-  border-bottom: solid ${({ theme }) => theme.colors.silver} 2px;
+const SearchInput = styled.input``
 
-  &:focus,
-  :active {
-    border: none;
-    border-bottom: solid ${({ theme }) => theme.colors.black} 2px;
-  }
-`
-
-const BaseButton = styled.button`
-  width: 80px;
-  height: 44px;
-  background: ${({ theme }) => theme.colors.white};
-  color: ${({ theme }) => theme.colors.black};
-  border: none;
-  border: solid ${({ theme }) => theme.colors.black} 1px;
-`
+const BaseButton = styled.button``
 
 const FiltersButton = styled(BaseButton)``
 
-const SearchButton = styled(BaseButton)`
-  border-radius: ${({ theme }) => `0px ${theme.radius.default} ${theme.radius.default} 0px`};
-  cursor: ${({ searching }) => searching && 'not-allowed'};
-  opacity: ${({ searching }) => searching && 0.5};
-`
+const SearchButton = styled(BaseButton)``
 
-const Main = styled.div`
-  position: relative;
-`
+const Main = styled.div``
 
 const ITEMS_PER_PAGE = 10
 

@@ -2,16 +2,7 @@ import { Tag, TagsContainer } from 'components'
 import { technologies, levels, languages } from 'helpers'
 import styled from 'styled-components'
 
-const Wrapper = styled.div`
-  margin: ${({ theme }) => theme.sizes.md} 0;
-  width: 100%;
-  border: solid ${({ theme }) => theme.colors.silver} 1px;
-  background: ${({ theme }) => theme.colors.white};
-
-  animation: wrapperScale 500ms ease-in-out;
-
-  ${({ theme }) => theme.animations.scale('wrapperScale')};
-`
+const Wrapper = styled.div``
 
 export default function Filters({
   isOpen,
