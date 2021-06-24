@@ -3,16 +3,14 @@ import { technologies, levels, languages } from 'helpers'
 import styled from 'styled-components'
 
 const Wrapper = styled.div`
-  position: absolute;
-  left: 0;
+  margin: ${({ theme }) => theme.sizes.md} 0;
   width: 100%;
-  z-index: 2;
   border: solid ${({ theme }) => theme.colors.silver} 1px;
   background: ${({ theme }) => theme.colors.white};
 
-  animation: wrapperAppears 500ms ease-in-out;
+  animation: wrapperScale 500ms ease-in-out;
 
-  ${({ theme }) => theme.animations.appears('wrapperAppears')};
+  ${({ theme }) => theme.animations.scale('wrapperScale')};
 `
 
 export default function Filters({

@@ -16,14 +16,27 @@ export default createGlobalStyle`
   }
 
   * {
-    font-size: 1em;
     box-sizing: border-box;
     color: ${({ theme }) => theme.colors.black};
-    transition: ${({ theme }) => theme.helpers.transitions(['background', 'opacity', 'color'])};
+    transition: ${({ theme }) =>
+      theme.helpers.transitions(['background', 'opacity', 'color', 'box-shadow'])};
+  }
+
+  label {
+    font-weight: ${({ theme }) => theme.fonts.weight.bold};
+    font-size: 1.1rem;
+  }
+
+  input, textarea, select, div, button {
+    font-size: 1rem;
   }
 
   button {
     cursor: pointer;
+  }
+
+  button, input {
+    box-sizing: content-box;
   }
 
   input,

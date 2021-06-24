@@ -1,5 +1,5 @@
 export { default as Button } from './form/Button'
-export { default as Textfield } from './form/Button'
+export { default as Textfield } from './form/Textfield'
 
 export { default as Modal } from './Modal'
 

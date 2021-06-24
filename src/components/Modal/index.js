@@ -16,25 +16,33 @@ const Overlay = styled.div`
 `
 
 const ModalWrapper = styled.div`
+  color: ${({ theme }) => theme.colors.black};
+  background: ${({ theme }) => theme.colors.white};
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background: white;
   width: 100%;
-  max-width: 500px;
+  max-width: 772px;
   padding: ${({ theme }) => `${theme.sizes.sm} ${theme.sizes.lg}`};
   border-radius: ${({ theme }) => theme.radius.default};
 `
 
 const CloseButton = styled.button`
+  background: ${({ theme }) => theme.colors.white};
   position: absolute;
   top: -16px;
   right: -16px;
   height: 36px;
   width: 36px;
   border-radius: 50px;
-  border: solid ${({ theme }) => theme.colors.black} 1px;
+  padding: ${({ theme }) => theme.sizes.xxs};
+  box-shadow: ${({ theme }) => theme.shadows.colored(theme.colors.black)};
+  border: none;
+
+  &:hover {
+    opacity: ${({ theme }) => theme.opacities.default};
+  }
 `
 
 export default function Modal({ children, isOpen, onClose }) {

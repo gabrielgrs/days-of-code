@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Button } from 'components'
+import { Icon } from 'components'
 import api from 'services/api'
 import styled from 'styled-components'
 import buildQueryString from 'utils/buildQueryString'
@@ -24,25 +24,45 @@ const Content = styled.div`
   gap: ${({ theme }) => theme.sizes.xs};
 `
 
-const Title = styled.h1``
+const Title = styled.h1`
+  color: ${({ theme }) => theme.colors.primary};
+  font-weight: ${({ theme }) => theme.fonts.weight.bold};
+  font-family: ${({ theme }) => theme.fonts.type.secondary};
+  font-size: 3em;
+`
+
+const InputWrapper = styled.div`
+  position: relative;
+`
 
 const SearchInput = styled.input`
-  width: 300px;
-  color: ${({ theme }) => theme.colors.black};
+  position: relative;
+  width: 100%;
+  max-width: 500px;
   background: ${({ theme }) => theme.colors.white};
-  border: solid ${({ theme }) => theme.colors.silver} 1px;
+  color: ${({ theme }) => theme.colors.black};
+  height: 44px;
+  padding-left: ${({ theme }) => theme.sizes.sm};
+  border: none;
+  border-bottom: solid ${({ theme }) => theme.colors.silver} 2px;
 
-  &:focus {
-    border: solid ${({ theme }) => theme.colors.black} 1px;
+  &:focus,
+  :active {
+    border: none;
+    border-bottom: solid ${({ theme }) => theme.colors.black} 2px;
   }
 `
 
-const FiltersButton = styled(Button)`
-  width: 100px;
+const FiltersButton = styled.button`
+  width: 80px;
+  height: 44px;
 `
 
-const SearchButton = styled(Button)`
-  width: 100px;
+const SearchButton = styled.button`
+  cursor: ${({ searching }) => searching && 'not-allowed'};
+  width: 80px;
+  height: 44px;
+  opacity: ${({ searching }) => searching && 0.5};
 `
 
 const Main = styled.div`
@@ -83,6 +103,8 @@ export default function Search() {
   }
 
   const onSearch = async (limit = ITEMS_PER_PAGE) => {
+    if (searching) return null
+
     setShowFilters(false)
     setSearching(true)
 
@@ -94,8 +116,6 @@ export default function Search() {
       language: selectedLanguage,
       limit,
     })
-
-    debugger
 
     onSetLastSearch(queryString)
     const { data, headers } = await api.get(`/content/getAll?${queryString}`)
@@ -116,22 +136,25 @@ export default function Search() {
       <Content>
         <Title>Days Of Code</Title>
         <Main>
-          <FiltersButton onClick={() => setShowFilters((p) => !p)}>
-            {showFilters ? 'Hide' : 'Show'} filters
-          </FiltersButton>
-          <SearchInput
-            placeholder="Type your search..."
-            value={searchText}
-            onChange={({ target }) => setSearchText(target.value)}
-          />
-          <SearchButton disabled={searching} onClick={() => onSearch()}>
-            {!searching ? 'Search' : 'Searching...'}
-          </SearchButton>
-          {!!items.length && !showFilters && lastSearch && (
-            <div>
-              <strong>Result from:</strong> {lastSearch}
-            </div>
-          )}
+          <InputWrapper>
+            <SearchInput
+              placeholder="Type your search..."
+              value={searchText}
+              onKeyDown={({ code }) => code === 'Enter' && onSearch()}
+              onChange={({ target }) => setSearchText(target.value)}
+            />
+            <FiltersButton onClick={() => setShowFilters((p) => !p)}>
+              <Icon name="filters" height={28} />
+            </FiltersButton>
+            <SearchButton searching={searching} onClick={() => onSearch()}>
+              <Icon name="search" height={28} />
+            </SearchButton>
+            {!!items.length && !showFilters && lastSearch && (
+              <div>
+                <strong>Result from:</strong> {lastSearch}
+              </div>
+            )}
+          </InputWrapper>
           <Filters
             isOpen={showFilters}
             selectedLanguage={selectedLanguage}

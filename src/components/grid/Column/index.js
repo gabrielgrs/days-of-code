@@ -22,9 +22,8 @@ const getWidthByQuantity = (size) => {
 
 const Column = styled.div`
   width: 96%;
-
+  margin-top: ${({ theme }) => theme.sizes.xs};
   float: left;
-  margin: ${({ margin }) => margin};
   min-height: 0.125rem;
 
   @media only screen and (min-width: 45em) {

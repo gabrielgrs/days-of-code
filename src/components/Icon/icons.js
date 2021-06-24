@@ -7,6 +7,8 @@ const icons = {
   profile: boxIcons.Person,
   add: boxIcons.Add,
   heart: boxIcons.Heart,
+  filters: boxIcons.Filter,
+  search: boxIcons.Search,
 }
 
 export default icons

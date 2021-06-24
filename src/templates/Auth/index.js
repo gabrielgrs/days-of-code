@@ -2,7 +2,7 @@ import { useState } from 'react'
 import styled from 'styled-components'
 import { useForm } from 'react-hook-form'
 import api from 'services/api'
-import { Row, Column, Button, Modal } from 'components'
+import { Row, Column, Button, Modal, Textfield } from 'components'
 import useAuth from 'hooks/useAuth'
 
 const Tabs = styled.div`
@@ -65,10 +65,10 @@ export default function Auth({ isOpen, onClose }) {
           </Tab>
         </Tabs>
         <div>
-          <input {...register('email', { required: true })} placeholder="Type your email" />
+          <Textfield {...register('email', { required: true })} placeholder="Type your email" />
         </div>
         <div>
-          <input
+          <Textfield
             {...register('password', { required: true })}
             type={!showPassword && 'password'}
             placeholder="Type your password"

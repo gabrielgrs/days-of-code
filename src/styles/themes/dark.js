@@ -13,6 +13,8 @@ const darkTheme = {
     warning: lightTheme.colors.warning,
     danger: lightTheme.colors.danger,
   },
+  // TODO
+  contrasts: {},
 }
 
 export default darkTheme

@@ -12,6 +12,8 @@ const lightTheme = {
     warning: '#FF9141',
     danger: '#FF4141',
   },
+  // TODO
+  contrasts: {},
 }
 
 export default lightTheme

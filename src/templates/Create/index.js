@@ -1,4 +1,4 @@
-import { Button, Modal, TagsContainer, Tag } from 'components'
+import { Row, Column, Button, Modal, TagsContainer, Tag, Textfield } from 'components'
 import { languages, levels, technologies } from 'helpers'
 import { useForm } from 'react-hook-form'
 import api from 'services/api'
@@ -35,66 +35,81 @@ export default function Create({ isOpen, onClose }) {
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div>
-          <div>Title</div>
-          <input {...register('title', { required: true })} placeholder="some title" />
-        </div>
-        <div>
-          <div>Link</div>
-          <input
-            {...register('link', { required: true, validate: (v) => isValidLink(v) })}
-            placeholder="https://sitefromtest.com/somecontent"
-          />
-        </div>
-        <div>languages</div>
-        <TagsContainer>
-          {languages.map((lang) => (
-            <Tag
-              key={lang}
-              onClick={() => setValue('language', lang)}
-              active={selectedLanguage === lang}
-            >
-              {lang}
-            </Tag>
-          ))}
-        </TagsContainer>
-        <div>technologies</div>
-        <TagsContainer>
-          {technologies.map((tech) => (
-            <Tag
-              key={tech}
-              onClick={() =>
-                setValue(
-                  'technologies',
-                  selectedTechnologies.includes(tech)
-                    ? selectedTechnologies.filter((x) => x !== tech)
-                    : [...selectedTechnologies, tech]
-                )
-              }
-              active={selectedTechnologies.includes(tech)}
-            >
-              {tech}
-            </Tag>
-          ))}
-        </TagsContainer>
-        <div>Level</div>
-        <TagsContainer>
-          {levels.map((level) => (
-            <Tag
-              key={level}
-              onClick={() => setValue('level', level)}
-              active={selectedLevel === level}
-            >
-              {level}
-            </Tag>
-          ))}
-        </TagsContainer>
-        <Button disabled={formState.isSubmitting} onClick={() => reset()}>
-          Reset
-        </Button>
-        <Button disabled={formState.isSubmitting} type="submit">
-          Submit
-        </Button>
+        <Row>
+          <Column size={12}>
+            <label>Title</label>
+            <Textfield {...register('title', { required: true })} placeholder="some title" />
+          </Column>
+          <Column size={12}>
+            <label>Link</label>
+            <Textfield
+              {...register('link', { required: true, validate: (v) => isValidLink(v) })}
+              placeholder="https://sitefromtest.com/somecontent"
+            />
+          </Column>
+          <Column size={12}>
+            <label>languages</label>
+            <TagsContainer>
+              {languages.map((lang) => (
+                <Tag
+                  key={lang}
+                  onClick={() => setValue('language', lang)}
+                  active={selectedLanguage === lang}
+                >
+                  {lang}
+                </Tag>
+              ))}
+            </TagsContainer>
+          </Column>
+          <Column size={12}>
+            <label>Technologies</label>
+            <TagsContainer>
+              {technologies.map((tech) => (
+                <Tag
+                  key={tech}
+                  onClick={() =>
+                    setValue(
+                      'technologies',
+                      selectedTechnologies.includes(tech)
+                        ? selectedTechnologies.filter((x) => x !== tech)
+                        : [...selectedTechnologies, tech]
+                    )
+                  }
+                  active={selectedTechnologies.includes(tech)}
+                >
+                  {tech}
+                </Tag>
+              ))}
+            </TagsContainer>
+          </Column>
+          <Column size={12}>
+            <label>Level</label>
+            <TagsContainer>
+              {levels.map((level) => (
+                <Tag
+                  key={level}
+                  onClick={() => setValue('level', level)}
+                  active={selectedLevel === level}
+                >
+                  {level}
+                </Tag>
+              ))}
+            </TagsContainer>
+          </Column>
+        </Row>
+        <div style={{ margin: '16px 0' }} />
+        <Row>
+          <Column size={6}>
+            <Button fullWidth disabled={formState.isSubmitting} onClick={() => reset()}>
+              Reset
+            </Button>
+          </Column>
+          <Column size={6}>
+            <Button fullWidth disabled={formState.isSubmitting} type="submit">
+              Submit
+            </Button>
+          </Column>
+        </Row>
       </form>
     </Modal>
   )
