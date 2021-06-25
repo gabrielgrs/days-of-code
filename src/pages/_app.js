@@ -7,6 +7,8 @@ import GlobalStyles from 'styles/GlobalStyles'
 import Navbar from 'templates/Navbar'
 import { AuthProvider } from 'contexts/AuthContext'
 import { ThemeProvider } from 'contexts/ThemeContext'
+import { SWRConfig } from 'swr'
+import api from 'services/api'
 
 function MyApp({ Component, pageProps }) {
   if (!process.browser) return null
@@ -20,10 +22,17 @@ function MyApp({ Component, pageProps }) {
       </Head>
       <ThemeProvider>
         <GlobalStyles />
-        <AuthProvider>
-          <Navbar />
-          <Component {...pageProps} />
-        </AuthProvider>
+        <SWRConfig
+          value={{
+            refreshInterval: 10000,
+            fetcher: (resource, init) => api.get(resource, init).then((res) => res.data),
+          }}
+        >
+          <AuthProvider>
+            <Navbar />
+            <Component {...pageProps} />
+          </AuthProvider>
+        </SWRConfig>
       </ThemeProvider>
     </Fragment>
   )

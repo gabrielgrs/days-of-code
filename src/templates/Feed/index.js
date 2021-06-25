@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import { Button, Column, Row } from 'components'
 import { rgba } from 'polished'
@@ -8,6 +8,8 @@ import Layout from 'components/Layout'
 import api from 'services/api'
 import buildQueryString from 'utils/buildQueryString'
 import useAuth from 'hooks/useAuth'
+import useOnScreen from 'hooks/useOnScreen'
+import useSWR from 'swr'
 
 const Textarea = styled.textarea`
   background: ${({ theme }) => theme.colors.white};
@@ -119,37 +121,30 @@ const ITEMS_PER_PAGE = 5
 const MAX_CHARACTERS = 50
 
 export default function Feed() {
+  const showMoreRef = useRef(null)
+
   const [text, setText] = useState('')
-  const [items, setItems] = useState([])
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [limit, setLimit] = useState(ITEMS_PER_PAGE)
-  const [totalRecords, setTotalRecords] = useState(0)
+  const [lastItemsCache, setLastItemsCache] = useState(undefined)
 
   const { isAuthenticated, user = {} } = useAuth()
 
   const invalidText = text.length > MAX_CHARACTERS
 
-  const getAll = useCallback(async (itemsPerPage = ITEMS_PER_PAGE) => {
-    const queryString = buildQueryString({ limit: itemsPerPage })
-    const { data, headers } = await api.get(`/publication/getAll?${queryString}`)
-    setTotalRecords(+headers['x-total-records'])
-    setItems(data)
-    // eslint-disable-next-line
-  }, [])
+  const { data: items = [], mutate } = useSWR(`/publication/getAll?limit=${limit}`, {
+    initialData: lastItemsCache,
+  })
 
-  useEffect(() => {
-    if (!items.length) {
-      getAll()
-    }
-  }, [getAll, items.length])
+  const isVisible = useOnScreen(showMoreRef)
 
   const onLike = (publicationId) =>
     api.put(`/publication/like?${buildQueryString({ publicationId })}`)
 
-  const onPressShowMore = () => {
+  const onShowMore = useCallback(() => {
+    setLastItemsCache(items)
     setLimit((p) => p + ITEMS_PER_PAGE)
-    getAll(limit + ITEMS_PER_PAGE)
-  }
+  }, [items])
 
   const onSubmit = async (t) => {
     try {
@@ -158,11 +153,15 @@ export default function Feed() {
       await api.post('/publication/create', { text: t })
       setLimit((p) => p + 1)
       setIsSubmitting(false)
-      getAll(limit + 1)
+      // getAll(limit + 1)
     } catch (error) {
       setText(t)
     }
   }
+
+  useEffect(() => {
+    if (isVisible) onShowMore()
+  }, [isVisible, onShowMore])
 
   return (
     <Layout>
@@ -217,8 +216,10 @@ export default function Feed() {
         </Column>
         <Column size={4} />
         <Column size={4}>
-          {totalRecords > items.length && (
-            <ShowMoreButton onClick={onPressShowMore}>Show more</ShowMoreButton>
+          {limit - items.length <= 10 && (
+            <ShowMoreButton ref={showMoreRef} onClick={onShowMore}>
+              Show more
+            </ShowMoreButton>
           )}
         </Column>
         <Column size={4} />
