@@ -13,3 +13,4 @@ export { default as Row } from './grid/Row'
 export { default as Column } from './grid/Column'
 
 export { default as Logo } from './Logo'
+export { default as Avatar } from './Avatar'
