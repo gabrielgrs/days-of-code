@@ -36,6 +36,7 @@ const sharedTheme = {
     lg: '32px',
     xl: '40px',
     xxl: '48px',
+    custom: (size) => `${size * 8}px`,
   },
   helpers: {
     transitions: (element, type) => {

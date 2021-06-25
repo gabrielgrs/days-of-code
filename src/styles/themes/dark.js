@@ -1,3 +1,4 @@
+import { darken } from 'polished'
 import sharedTheme from './shared'
 import lightTheme from './light'
 
@@ -8,7 +9,7 @@ const darkTheme = {
     secondary: lightTheme.colors.secondary,
     black: lightTheme.colors.white,
     white: lightTheme.colors.black,
-    silver: lightTheme.colors.silver,
+    silver: darken(0.7, lightTheme.colors.silver),
     success: lightTheme.colors.success,
     warning: lightTheme.colors.warning,
     danger: lightTheme.colors.danger,

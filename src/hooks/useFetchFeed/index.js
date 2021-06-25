@@ -6,7 +6,11 @@ export default function useFetchFeed({ limit, itemsPerPage }) {
   const [lastItemsCache, setLastItemsCache] = useState(undefined)
   const [totalRecords, setTotalRecords] = useState(itemsPerPage + 1)
 
-  const { data = [], mutate } = useSWR(`/publication/getAll?limit=${limit}`, {
+  const {
+    data = [],
+    mutate,
+    error,
+  } = useSWR(`/publication/getAll?limit=${limit}`, {
     initialData: lastItemsCache,
     fetcher: (resource, init) =>
       api.get(resource, init).then(({ data, headers }) => {
@@ -18,6 +22,7 @@ export default function useFetchFeed({ limit, itemsPerPage }) {
   useEffect(() => setLastItemsCache(data), [data])
 
   return {
+    loading: !data.length && !error,
     items: data,
     canLoadMore: data.length && totalRecords > data.length,
     mutate,

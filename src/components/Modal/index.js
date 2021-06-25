@@ -62,7 +62,7 @@ const CloseButton = styled.button`
 
 export default function Modal({ children, isOpen, onClose, width }) {
   useEffect(() => {
-    const onPressEscape = ({ code }) => code === 'Escape' && onClose()
+    const onPressEscape = ({ code }) => code === 'Escape' && onClose && onClose()
     window.addEventListener('keydown', (e) => onPressEscape(e))
     window.removeEventListener('keydown', (e) => onPressEscape(e))
   }, [onClose])
@@ -72,7 +72,7 @@ export default function Modal({ children, isOpen, onClose, width }) {
   return (
     <Overlay>
       <ModalWrapper width={width || '500px'}>
-        <CloseButton onClick={onClose}>
+        <CloseButton onClick={() => onClose && onClose()}>
           <Icon name="close" height={28} />
         </CloseButton>
         {children}

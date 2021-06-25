@@ -1,10 +1,12 @@
 import { useState, createContext, useCallback, useEffect } from 'react'
 import * as themes from 'styles/themes'
+import { SkeletonTheme } from 'react-loading-skeleton'
 import { ThemeProvider as StyledThemeProvider } from 'styled-components'
 
 export const ThemeContext = createContext({
   themeName: 'light',
   onChangeTheme: () => null,
+  theme: {},
 })
 
 export function ThemeProvider({ children }) {
@@ -23,8 +25,12 @@ export function ThemeProvider({ children }) {
   }, [onChangeTheme])
 
   return (
-    <ThemeContext.Provider value={{ themeName, onChangeTheme }}>
-      <StyledThemeProvider theme={theme}>{children}</StyledThemeProvider>
+    <ThemeContext.Provider value={{ themeName, onChangeTheme, theme }}>
+      <StyledThemeProvider theme={theme}>
+        <SkeletonTheme color={theme.colors.silver} highlightColor={theme.colors.white}>
+          {children}
+        </SkeletonTheme>
+      </StyledThemeProvider>
     </ThemeContext.Provider>
   )
 }

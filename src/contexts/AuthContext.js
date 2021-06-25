@@ -43,10 +43,8 @@ export function AuthProvider({ children }) {
     onVerifyToken(token)
   }, [onVerifyToken])
 
-  if (loading) return 'Loading....'
-
   return (
-    <AuthContext.Provider value={{ isAuthenticated: !!user, user, onAuthenticate }}>
+    <AuthContext.Provider value={{ isAuthenticated: !!user, user, onAuthenticate, loading }}>
       {children}
     </AuthContext.Provider>
   )
