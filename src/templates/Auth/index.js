@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { useForm } from 'react-hook-form'
 import api from 'services/api'
@@ -33,7 +33,11 @@ export default function Auth({ isOpen, onClose }) {
 
   const { onAuthenticate } = useAuth()
 
-  const { register, handleSubmit, formState } = useForm()
+  const { register, handleSubmit, formState, reset } = useForm()
+
+  useEffect(() => {
+    reset()
+  }, [reset, isRegister])
 
   const onSubmit = async (values) => {
     try {
@@ -59,6 +63,14 @@ export default function Auth({ isOpen, onClose }) {
           </Tab>
         </Tabs>
         <Row>
+          {isRegister && (
+            <Column size={12}>
+              <Textfield
+                {...register('username', { required: true })}
+                placeholder="Type your username"
+              />
+            </Column>
+          )}
           <Column size={12}>
             <Textfield {...register('email', { required: true })} placeholder="Type your email" />
           </Column>

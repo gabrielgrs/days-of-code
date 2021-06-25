@@ -1,11 +1,12 @@
-import { useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { Button, Column, Row } from 'components'
 import { rgba } from 'polished'
 import { format } from 'date-fns'
 import { Icon } from 'components'
-import { feedMock } from 'helpers'
 import Layout from 'components/Layout'
+import api from 'services/api'
+import buildQueryString from 'utils/buildQueryString'
 
 const Textarea = styled.textarea`
   background: ${({ theme }) => theme.colors.white};
@@ -32,7 +33,7 @@ const Textarea = styled.textarea`
 const Item = styled.div`
   cursor: pointer;
   width: 100%;
-  border-bottom: solid ${({ theme }) => theme.colors.silver} 1px;
+  border-bottom: ${({ theme, isLastItem }) => !isLastItem && `solid ${theme.colors.silver} 1px`};
   display: flex;
   flex-direction: column;
   gap: ${({ theme }) => theme.sizes.md};
@@ -47,7 +48,18 @@ const About = styled.div``
 
 const Text = styled.div``
 
-const Actions = styled.div``
+const Actions = styled.div`
+  display: flex;
+  align-items: center;
+  gap: ${({ theme }) => theme.sizes.sm};
+`
+
+const ActionItem = styled.div`
+  &:hover {
+    background: ${({ theme }) => theme.colors.primary};
+    border-radius: ${({ theme }) => theme.radius.default};
+  }
+`
 
 const FieldActions = styled.div`
   display: flex;
@@ -68,37 +80,91 @@ const CharactersCounter = styled.div`
   color: ${({ theme, invalid }) => (invalid ? theme.colors.danger : theme.colors.black)};
 `
 
-function Card({ nickname, createdAt, text }) {
+const ShowMoreButton = styled.button`
+  width: 100%;
+  background: none;
+  border: none;
+  color: ${({ theme }) => theme.colors.black};
+  font-size: 1.3rem;
+  margin-top: ${({ theme }) => theme.sizes.lg};
+
+  &:hover {
+    opacity: ${({ theme }) => theme.opacity.default};
+  }
+`
+
+function Card({ username, createdAt, text, isLastItem }) {
   return (
-    <Item>
+    <Item isLastItem={isLastItem}>
       <About>
-        @{nickname} - {format(createdAt, 'dd/mm/yyyy')}
+        @{username} - {format(createdAt, 'dd/mm/yyyy HH:mm')}
       </About>
       <Text>{text}</Text>
-      <Actions>Action</Actions>
+      <Actions>
+        <ActionItem>Teste</ActionItem>
+        <ActionItem>Teste</ActionItem>
+      </Actions>
     </Item>
   )
 }
 
+const ITEMS_PER_PAGE = 5
+const MAX_CHARACTERS = 50
+
 export default function Feed() {
   const [text, setText] = useState('')
+  const [items, setItems] = useState([])
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [limit, setLimit] = useState(ITEMS_PER_PAGE)
+  const [totalRecords, setTotalRecords] = useState(0)
 
-  const MAX_CHARACTERS = 30
   const invalidText = text.length > MAX_CHARACTERS
+
+  const getAll = useCallback(async (itemsPerPage = ITEMS_PER_PAGE) => {
+    const queryString = buildQueryString({ limit: itemsPerPage })
+    const { data, headers } = await api.get(`/publication/getAll?${queryString}`)
+    setTotalRecords(+headers['x-total-records'])
+    setItems(data)
+    // eslint-disable-next-line
+  }, [])
+
+  useEffect(() => {
+    if (!items.length) {
+      getAll()
+    }
+  }, [getAll, items.length])
+
+  const onPressShowMore = () => {
+    setLimit((p) => p + ITEMS_PER_PAGE)
+    getAll(limit + ITEMS_PER_PAGE)
+  }
+
+  const onSubmit = async (t) => {
+    try {
+      setIsSubmitting(true)
+      setText('')
+      await api.post('/publication/create', { text: t })
+      setLimit((p) => p + 1)
+      setIsSubmitting(false)
+      getAll(limit + 1)
+    } catch (error) {
+      setText(t)
+    }
+  }
 
   return (
     <Layout>
-      <Row>
-        <Column size={12}>
-          <div style={{ color: 'red' }}>This screen is a mock</div>
-        </Column>
-      </Row>
       <Row>
         <Column size={12}>
           <Textarea
             value={text}
             onChange={({ target }) => setText(target.value)}
             placeholder="Type some content..."
+            onKeyDown={({ shiftKey, code }) => {
+              if (code === 'Enter') {
+                if (!shiftKey) return onSubmit(text)
+              }
+            }}
             rows={4}
           />
           <FieldActions>
@@ -110,18 +176,33 @@ export default function Feed() {
               <CharactersCounter invalid={invalidText}>
                 {text.length} / {MAX_CHARACTERS}
               </CharactersCounter>
-              <Button disabled={invalidText || !text.length}>Send</Button>
+              <Button
+                onClick={() => onSubmit(text)}
+                disabled={isSubmitting || invalidText || !text.length}
+              >
+                Send
+              </Button>
             </FieldActionsSection>
           </FieldActions>
-          {feedMock.map((item) => (
-            <Card
-              key={item._id}
-              nickname={item.nickname}
-              createdAt={item.createdAt}
-              text={item.text}
-            />
-          ))}
+          {items.map((item, index) => {
+            return (
+              <Card
+                key={item._id}
+                username={item.creator.username}
+                createdAt={new Date(item.createdAt)}
+                text={item.text}
+                isLastItem={1 + index === items.length}
+              />
+            )
+          })}
         </Column>
+        <Column size={4} />
+        <Column size={4}>
+          {totalRecords > items.length && (
+            <ShowMoreButton onClick={onPressShowMore}>Show more</ShowMoreButton>
+          )}
+        </Column>
+        <Column size={4} />
       </Row>
     </Layout>
   )

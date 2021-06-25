@@ -9,8 +9,8 @@ async function request(req, res, { token }) {
 
     const data = await userCollection.findOne({ _id }).populate('learnings')
 
-    const { nickname, learnings } = data
-    const refreshedToken = await generateToken({ _id, nickname })
+    const { username, learnings } = data
+    const refreshedToken = await generateToken({ _id, username })
 
     const counts = learnings.reduce((acc, curr) => {
       curr.technologies.map((tech) => {

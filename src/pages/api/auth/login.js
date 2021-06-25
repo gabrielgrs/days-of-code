@@ -13,9 +13,9 @@ async function request(req, res) {
 
     if (!data) return res.status(400).send({ message: 'Invalid user' })
 
-    const { _id, nickname, learnings = [] } = data
+    const { _id, username, learnings = [] } = data
 
-    const token = await generateToken({ _id, nickname })
+    const token = await generateToken({ _id, username })
 
     const counts = learnings.reduce((acc, curr) => {
       curr.technologies.map((tech) => {
