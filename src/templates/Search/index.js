@@ -16,6 +16,18 @@ const Wrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+
+  animation: searchWrapperAppears 400ms linear;
+
+  @keyframes searchWrapperAppears {
+    from {
+      opacity: 0;
+    }
+
+    to {
+      opacity: 1;
+    }
+  }
 `
 
 const Content = styled.div`
