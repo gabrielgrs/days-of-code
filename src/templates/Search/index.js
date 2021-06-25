@@ -3,36 +3,13 @@ import { Logo } from 'components'
 import api from 'services/api'
 import styled from 'styled-components'
 import buildQueryString from 'utils/buildQueryString'
+import Layout from 'components/Layout'
 
 import Filters from './Filters'
 import Results from './Results'
 
 const Wrapper = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
   width: 100%;
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  animation: searchWrapperAppears 400ms linear;
-
-  @keyframes searchWrapperAppears {
-    from {
-      opacity: 0;
-    }
-
-    to {
-      opacity: 1;
-    }
-  }
-`
-
-const Content = styled.div`
-  width: 80%;
-  max-width: 1200px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -177,8 +154,8 @@ export default function Search() {
   }
 
   return (
-    <Wrapper>
-      <Content>
+    <Layout alignItems="center" height="100vh">
+      <Wrapper>
         <Logo />
         <Main>
           <InputWrapper>
@@ -218,7 +195,7 @@ export default function Search() {
           totalRecords={totalRecords}
           onShowMore={onShowMore}
         />
-      </Content>
-    </Wrapper>
+      </Wrapper>
+    </Layout>
   )
 }

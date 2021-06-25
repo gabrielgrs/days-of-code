@@ -5,17 +5,7 @@ import { rgba } from 'polished'
 import { format } from 'date-fns'
 import { Icon } from 'components'
 import { feedMock } from 'helpers'
-
-const Wrapper = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: center;
-`
-
-const Content = styled.div`
-  width: 80%;
-  max-width: 1200px;
-`
+import Layout from 'components/Layout'
 
 const Textarea = styled.textarea`
   background: ${({ theme }) => theme.colors.white};
@@ -70,7 +60,7 @@ const FieldActionsSection = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: ${({ theme }) => theme.sizes.xs};
+  gap: ${({ theme }) => theme.sizes.sm};
   margin-bottom: ${({ theme }) => theme.sizes.sm};
 `
 
@@ -97,44 +87,42 @@ export default function Feed() {
   const invalidText = text.length > MAX_CHARACTERS
 
   return (
-    <Wrapper>
-      <Content>
-        <Row>
-          <Column size={12}>
-            <div style={{ color: 'red' }}>This screen is a mock</div>
-          </Column>
-        </Row>
-        <Row>
-          <Column size={12}>
-            <Textarea
-              value={text}
-              onChange={({ target }) => setText(target.value)}
-              placeholder="Type some content..."
-              rows={4}
+    <Layout>
+      <Row>
+        <Column size={12}>
+          <div style={{ color: 'red' }}>This screen is a mock</div>
+        </Column>
+      </Row>
+      <Row>
+        <Column size={12}>
+          <Textarea
+            value={text}
+            onChange={({ target }) => setText(target.value)}
+            placeholder="Type some content..."
+            rows={4}
+          />
+          <FieldActions>
+            <FieldActionsSection>
+              <Icon name="report" cursor="not-allowed" />
+              <Icon name="report" cursor="not-allowed" />
+            </FieldActionsSection>
+            <FieldActionsSection>
+              <CharactersCounter invalid={invalidText}>
+                {text.length} / {MAX_CHARACTERS}
+              </CharactersCounter>
+              <Button disabled={invalidText || !text.length}>Send</Button>
+            </FieldActionsSection>
+          </FieldActions>
+          {feedMock.map((item) => (
+            <Card
+              key={item._id}
+              nickname={item.nickname}
+              createdAt={item.createdAt}
+              text={item.text}
             />
-            <FieldActions>
-              <FieldActionsSection>
-                <Icon name="report" cursor="pointer" />
-                <Icon name="report" cursor="pointer" />
-              </FieldActionsSection>
-              <FieldActionsSection>
-                <CharactersCounter invalid={invalidText}>
-                  {text.length} / {MAX_CHARACTERS}
-                </CharactersCounter>
-                <Button>Send</Button>
-              </FieldActionsSection>
-            </FieldActions>
-            {feedMock.map((item) => (
-              <Card
-                key={item._id}
-                nickname={item.nickname}
-                createdAt={item.createdAt}
-                text={item.text}
-              />
-            ))}
-          </Column>
-        </Row>
-      </Content>
-    </Wrapper>
+          ))}
+        </Column>
+      </Row>
+    </Layout>
   )
 }

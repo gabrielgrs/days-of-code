@@ -1,7 +1,9 @@
 import styled from 'styled-components'
 
 const Button = styled.button`
+  cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
   width: ${({ fullWidth }) => fullWidth && '100%'};
+  opacity: ${({ disabled, theme }) => disabled && theme.opacity.default};
   height: 44px;
   min-width: 100px;
   font-size: 1.1rem;
@@ -12,8 +14,8 @@ const Button = styled.button`
   border-radius: ${({ theme }) => theme.radius.default};
 
   &:hover {
-    background: ${({ theme }) => theme.colors.black};
-    color: ${({ theme }) => theme.colors.white};
+    background: ${({ theme, disabled }) => !disabled && theme.colors.black};
+    color: ${({ theme, disabled }) => !disabled && theme.colors.white};
   }
 `
 
