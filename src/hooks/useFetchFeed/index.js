@@ -24,7 +24,7 @@ export default function useFetchFeed({ limit, itemsPerPage }) {
   return {
     loading: !data.length && !error,
     items: data,
-    canLoadMore: data.length && totalRecords > data.length,
+    canLoadMore: !!data.length && totalRecords > data.length,
     mutate,
   }
 }

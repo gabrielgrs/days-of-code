@@ -11,7 +11,10 @@ const icons = {
   filters: boxIcons.Filter,
   search: boxIcons.Search,
   rightArrow: boxIcons.ArrowForward,
+  leftArrow: materialIcons.ArrowBack,
   report: materialIcons.Block,
+  edit: boxIcons.Pencil,
+  eye: boxIcons.Eye,
 }
 
 export default icons
