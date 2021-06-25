@@ -1,11 +1,10 @@
-import { Tag, TagsContainer } from 'components'
+import { Modal, Tag, TagsContainer } from 'components'
 import { technologies, levels, languages } from 'helpers'
 import styled from 'styled-components'
 
-const Wrapper = styled.div``
-
 export default function Filters({
   isOpen,
+  onClose,
   selectedLanguage,
   setSelectedLanguage,
   onSelectTechnology,
@@ -13,10 +12,8 @@ export default function Filters({
   selectedLevel,
   setSelectedLevel,
 }) {
-  if (!isOpen) return null
-
   return (
-    <Wrapper>
+    <Modal isOpen={isOpen} onClose={onClose}>
       <div>languages</div>
       <TagsContainer>
         {languages.map((lang) => (
@@ -53,6 +50,6 @@ export default function Filters({
           </Tag>
         ))}
       </TagsContainer>
-    </Wrapper>
+    </Modal>
   )
 }

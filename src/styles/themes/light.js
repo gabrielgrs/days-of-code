@@ -3,7 +3,8 @@ import sharedTheme from './shared'
 const lightTheme = {
   ...sharedTheme,
   colors: {
-    primary: '#363537',
+    // primary: '#363537',
+    primary: '#d3332f',
     secondary: '#6A7FDB',
     black: '#141414', // #272727
     white: '#f7f8ff',

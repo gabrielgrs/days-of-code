@@ -8,7 +8,8 @@ const Textfield = styled.input`
 
   outline: none;
   border: none;
-  border-bottom: solid ${({ theme }) => theme.colors.silver} 2px;
+  border-bottom: solid ${({ theme, error }) => (error ? theme.colors.danger : theme.colors.silver)}
+    2px;
   padding: 0 ${({ theme }) => theme.sizes.xxs};
 
   &:focus {

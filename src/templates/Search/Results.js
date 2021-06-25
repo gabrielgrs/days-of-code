@@ -55,10 +55,11 @@ export default function Result({ list, totalRecords, onLike, onLearn, onReport, 
               <Actions>
                 <Icon
                   name="heart"
+                  cursor="pointer"
                   color={item.likes.includes(user._id) ? 'black' : 'danger'}
                   onClick={() => onLike(item._id)}
                 />
-                <div onClick={() => onReport(item._id)}>Report</div>
+                <Icon name="report" cursor="pointer" onClick={() => onReport(item._id)} />
               </Actions>
               <Learned>
                 <div onClick={() => onLearn(item._id)}>

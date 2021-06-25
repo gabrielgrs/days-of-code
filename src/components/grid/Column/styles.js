@@ -24,7 +24,7 @@ export const StyledColumn = styled.div`
   width: 96%;
 
   float: left;
-  margin: ${({ margin }) => margin};
+  margin: 0.5rem 2%;
   min-height: 0.125rem;
 
   @media only screen and (min-width: 45em) {

@@ -7,7 +7,7 @@ const Button = styled.button`
   text-transform: uppercase;
   font-weight: ${({ theme }) => theme.fonts.weight.bold};
   background: none;
-  border: solid ${({ theme }) => theme.colors.primary} 2px;
+  border: solid ${({ theme }) => theme.colors.black} 2px;
   border-radius: ${({ theme }) => theme.radius.default};
 
   &:hover {

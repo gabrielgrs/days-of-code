@@ -38,6 +38,10 @@ const ModalWrapper = styled.div`
       transform: scale(1) translate(-50%, -50%);
     }
   }
+
+  @media screen and (max-width: 992px) {
+    width: 95%;
+  }
 `
 
 const CloseButton = styled.button`

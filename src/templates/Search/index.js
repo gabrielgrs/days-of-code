@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Icon, Logo } from 'components'
+import { Logo } from 'components'
 import api from 'services/api'
 import styled from 'styled-components'
 import buildQueryString from 'utils/buildQueryString'
@@ -18,18 +18,29 @@ const Wrapper = styled.div`
   align-items: center;
 `
 
-const Content = styled.div``
+const Content = styled.div`
+  width: 700px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`
 
 const InputWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
   gap: ${({ theme }) => theme.sizes.xxs};
+  width: 100%;
+
+  @media screen and (max-width: 992px) {
+    flex-wrap: wrap;
+  }
 `
 
 const SearchInput = styled.input`
   font-size: 1.1rem;
-  width: 200px;
+  width: 100%;
   background: none;
   border: none;
   border-bottom: solid ${({ theme }) => theme.colors.silver} 2px;
@@ -42,23 +53,44 @@ const SearchInput = styled.input`
 `
 
 const BaseButton = styled.button`
+  color: ${({ theme }) => theme.colors.primary};
   background: none;
   border: none;
   font-size: 1.1rem;
-  width: 100px;
+  width: 120px;
+  text-transform: uppercase;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: ${({ theme }) => theme.sizes.xs};
+
+  &:hover {
+    gap: ${({ theme }) => theme.sizes.sm};
+  }
 `
 
-const FiltersButton = styled(BaseButton)``
-
-const SearchButton = styled(BaseButton)`
-  display: flex;
-
+const FiltersButton = styled(BaseButton)`
   &:before {
     content: '{ ';
   }
 
   &:after {
     content: ' }';
+  }
+`
+
+const SearchButton = styled(BaseButton)`
+  cursor: ${({ searching }) => (searching ? 'not-allowed' : 'pointer')};
+  color: ${({ theme, searching }) => (searching ? theme.colors.black : theme.colors.primary)};
+
+  &:before {
+    content: '[ ';
+  }
+
+  &:after {
+    content: ' ]';
   }
 `
 
@@ -137,7 +169,6 @@ export default function Search() {
         <Logo />
         <Main>
           <InputWrapper>
-            <Icon name="rightArrow" />
             <SearchInput
               placeholder="Type your search..."
               value={searchText}
@@ -146,7 +177,7 @@ export default function Search() {
             />
             <FiltersButton onClick={() => setShowFilters((p) => !p)}>Filters</FiltersButton>
             <SearchButton searching={searching} onClick={() => onSearch()}>
-              {searching ? 'Searching...' : 'Search'}
+              {searching ? '...' : 'Search'}
             </SearchButton>
           </InputWrapper>
           {!!items.length && !showFilters && lastSearch && (
@@ -156,6 +187,7 @@ export default function Search() {
           )}
           <Filters
             isOpen={showFilters}
+            onClose={() => setShowFilters(false)}
             selectedLanguage={selectedLanguage}
             setSelectedLanguage={setSelectedLanguage}
             onSelectTechnology={onSelectTechnology}

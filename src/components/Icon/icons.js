@@ -1,4 +1,5 @@
 import * as boxIcons from '@styled-icons/ionicons-outline'
+import * as materialIcons from '@styled-icons/material-outlined'
 
 const icons = {
   close: boxIcons.Close,
@@ -10,6 +11,7 @@ const icons = {
   filters: boxIcons.Filter,
   search: boxIcons.Search,
   rightArrow: boxIcons.ArrowForward,
+  report: materialIcons.Block,
 }
 
 export default icons

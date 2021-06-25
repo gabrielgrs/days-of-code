@@ -20,6 +20,7 @@ export default createGlobalStyle`
         'right',
         'padding',
         'border',
+        'gap',
       ])};
     color: ${({ theme }) => theme.colors.black};
   }

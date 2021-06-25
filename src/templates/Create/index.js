@@ -1,10 +1,11 @@
-import { Button, Modal, TagsContainer, Tag, Textfield } from 'components'
+import { Button, Modal, TagsContainer, Tag, Textfield, Row, Column, Label } from 'components'
 import { languages, levels, technologies } from 'helpers'
 import { useForm } from 'react-hook-form'
 import api from 'services/api'
 
 export default function Create({ isOpen, onClose }) {
   const { register, handleSubmit, watch, setValue, reset, formState } = useForm()
+  const { isSubmitting, errors } = formState
 
   const selectedLanguage = watch('language')
   const selectedLevel = watch('level')
@@ -35,20 +36,27 @@ export default function Create({ isOpen, onClose }) {
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div>
-          <div>
-            <label>Title</label>
-            <Textfield {...register('title', { required: true })} placeholder="some title" />
-          </div>
-          <div>
-            <label>Link</label>
+        <Row>
+          <Column size={12}>
+            <Label>Link</Label>
+            <Textfield
+              {...register('title', { required: true })}
+              placeholder="some title"
+              error={errors.title}
+            />
+          </Column>
+
+          <Column size={12}>
+            <Label>Link</Label>
             <Textfield
               {...register('link', { required: true, validate: (v) => isValidLink(v) })}
               placeholder="https://sitefromtest.com/somecontent"
+              error={errors.link}
             />
-          </div>
-          <div>
-            <label>languages</label>
+          </Column>
+
+          <Column size={12}>
+            <Label>languages</Label>
             <TagsContainer>
               {languages.map((lang) => (
                 <Tag
@@ -60,9 +68,10 @@ export default function Create({ isOpen, onClose }) {
                 </Tag>
               ))}
             </TagsContainer>
-          </div>
-          <div>
-            <label>Technologies</label>
+          </Column>
+
+          <Column size={12}>
+            <Label>Technologies</Label>
             <TagsContainer>
               {technologies.map((tech) => (
                 <Tag
@@ -81,9 +90,10 @@ export default function Create({ isOpen, onClose }) {
                 </Tag>
               ))}
             </TagsContainer>
-          </div>
-          <div>
-            <label>Level</label>
+          </Column>
+
+          <Column size={12}>
+            <Label>Level</Label>
             <TagsContainer>
               {levels.map((level) => (
                 <Tag
@@ -95,21 +105,20 @@ export default function Create({ isOpen, onClose }) {
                 </Tag>
               ))}
             </TagsContainer>
-          </div>
-        </div>
-        <div style={{ margin: '16px 0' }} />
-        <div>
-          <div>
-            <Button fullWidth disabled={formState.isSubmitting} onClick={() => reset()}>
+          </Column>
+        </Row>
+        <Row paddingTop="md">
+          <Column size={6}>
+            <Button fullWidth disabled={isSubmitting} onClick={() => reset()}>
               Reset
             </Button>
-          </div>
-          <div>
-            <Button fullWidth disabled={formState.isSubmitting} type="submit">
+          </Column>
+          <Column size={6}>
+            <Button fullWidth disabled={isSubmitting} type="submit">
               Submit
             </Button>
-          </div>
-        </div>
+          </Column>
+        </Row>
       </form>
     </Modal>
   )

@@ -8,6 +8,7 @@ const Wrapper = styled.h1`
   text-transform: uppercase;
   font-size: 3rem;
   margin: ${({ theme }) => theme.sizes.lg} 0;
+  padding-right: ${({ active }) => active && '25%'};
 
   * {
     transition: all 0.6s linear;
@@ -42,7 +43,7 @@ const Right = styled.div`
 const Bar = styled.div`
   margin: 0 ${({ theme }) => theme.sizes.xxs};
   transform: ${({ active }) => (active ? '' : ' rotateZ(22deg)')};
-  color: ${({ theme }) => theme.colors.warning};
+  color: ${({ theme }) => theme.colors.primary};
 `
 
 const Opacify = styled.span`
@@ -53,7 +54,7 @@ export default function Logo() {
   const [active, setActive] = useState(false)
 
   return (
-    <Wrapper onClick={() => setActive((p) => !p)}>
+    <Wrapper active={active} onClick={() => setActive((p) => !p)}>
       <Left active={active}>
         D<Opacify active={active}>eveloper</Opacify>
       </Left>{' '}

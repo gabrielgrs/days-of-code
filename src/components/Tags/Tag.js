@@ -8,8 +8,8 @@ const Tag = styled.div`
   font-weight: ${({ theme }) => theme.fonts.weight.bold};
   border-radius: ${({ theme }) => theme.radius.default};
 
-  background: ${({ active }) => (active ? 'black' : 'white')};
-  color: ${({ active }) => (active ? 'white' : 'black')};
+  background: ${({ theme, active }) => (active ? theme.colors.black : theme.colors.white)};
+  color: ${({ theme, active }) => (active ? theme.colors.white : theme.colors.black)};
 `
 
 export default Tag
