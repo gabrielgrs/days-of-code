@@ -1,5 +1,6 @@
 export { default as Button } from './form/Button'
 export { default as Textfield } from './form/Textfield'
+export { default as Textarea } from './form/Textarea'
 export { default as Label } from './form/Label'
 
 export { default as Modal } from './Modal'

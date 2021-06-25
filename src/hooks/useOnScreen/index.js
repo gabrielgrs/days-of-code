@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react'
 
-const useOnScreen = (ref) => {
+const useOnScreen = (ref, reload) => {
   const [isIntersecting, setIntersecting] = useState(false)
+
+  useEffect(() => {}, [])
 
   useEffect(() => {
     if (ref?.current) {
@@ -10,7 +12,7 @@ const useOnScreen = (ref) => {
       observer.observe(ref.current)
       return () => observer.disconnect()
     }
-  }, [ref])
+  }, [ref, reload])
 
   return isIntersecting
 }
