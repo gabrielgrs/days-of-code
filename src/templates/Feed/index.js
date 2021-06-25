@@ -30,7 +30,10 @@ export default function Feed() {
 
   const [limit, setLimit] = useState(ITEMS_PER_PAGE)
 
-  const { items, mutate, canLoadMore } = useFetchFeed({ limit, itemsPerPage: ITEMS_PER_PAGE })
+  const { items, mutate, canLoadMore, loading } = useFetchFeed({
+    limit,
+    itemsPerPage: ITEMS_PER_PAGE,
+  })
 
   const isVisible = useOnScreen(showMoreRef, canLoadMore)
 
@@ -60,11 +63,11 @@ export default function Feed() {
           <Input onSubmit={onSubmit} />
         </Column>
         <Column size={12}>
-          <List items={items} onLike={onLike} />
+          <List loading={loading} items={items} onLike={onLike} />
         </Column>
         <Column size={4} />
         <Column size={4}>
-          {canLoadMore && (
+          {canLoadMore && !loading && (
             <ShowMoreButton ref={showMoreRef} onClick={onShowMore}>
               Show more
             </ShowMoreButton>

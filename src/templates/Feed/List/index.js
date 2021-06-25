@@ -1,9 +1,11 @@
+import { memo } from 'react'
 import styled from 'styled-components'
 import { rgba } from 'polished'
 import { format } from 'date-fns'
 import { Icon } from 'components'
 import useAuth from 'hooks/useAuth'
-import { memo } from 'react'
+
+import Loader from './Loader'
 
 const Item = styled.div`
   cursor: pointer;
@@ -57,8 +59,11 @@ function Card({ id, username, createdAt, text, isLastItem, onLike, isLiked }) {
   )
 }
 
-function FeedList({ items, onLike }) {
+function FeedList({ items, onLike, loading }) {
   const { user = {} } = useAuth()
+
+  if (loading) return <Loader />
+
   return items.map((item, index) => {
     return (
       <Card
