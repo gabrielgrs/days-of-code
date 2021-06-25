@@ -83,7 +83,7 @@ export default function Auth({ isOpen, onClose }) {
           </Column>
           <Column size={12}>
             <PasswordDisplay type="button" onClick={() => setShowPassword((p) => !p)}>
-              {showPassword ? 'hide' : 'show'}
+              {showPassword ? 'hide' : 'show'} password
             </PasswordDisplay>
           </Column>
         </Row>

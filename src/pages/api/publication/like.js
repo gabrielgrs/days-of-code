@@ -5,7 +5,7 @@ import { decodeToken } from 'services/token'
 async function request(req, res, { token }) {
   try {
     const { _id } = await decodeToken(token)
-    const { contentId: publicationId } = req.query
+    const { publicationId } = req.query
 
     const data = await publicationCollection.findOne({ _id: publicationId })
     const currentLikes = data?.likes || []

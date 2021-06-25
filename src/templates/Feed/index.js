@@ -7,6 +7,7 @@ import { Icon } from 'components'
 import Layout from 'components/Layout'
 import api from 'services/api'
 import buildQueryString from 'utils/buildQueryString'
+import useAuth from 'hooks/useAuth'
 
 const Textarea = styled.textarea`
   background: ${({ theme }) => theme.colors.white};
@@ -56,8 +57,7 @@ const Actions = styled.div`
 
 const ActionItem = styled.div`
   &:hover {
-    background: ${({ theme }) => theme.colors.primary};
-    border-radius: ${({ theme }) => theme.radius.default};
+    opacity: ${({ theme }) => theme.opacity.default};
   }
 `
 
@@ -93,7 +93,7 @@ const ShowMoreButton = styled.button`
   }
 `
 
-function Card({ username, createdAt, text, isLastItem }) {
+function Card({ id, username, createdAt, text, isLastItem, onLike, isLiked }) {
   return (
     <Item isLastItem={isLastItem}>
       <About>
@@ -101,8 +101,15 @@ function Card({ username, createdAt, text, isLastItem }) {
       </About>
       <Text>{text}</Text>
       <Actions>
-        <ActionItem>Teste</ActionItem>
-        <ActionItem>Teste</ActionItem>
+        <ActionItem>
+          <Icon
+            name="heart"
+            cursor="pointer"
+            color={isLiked ? 'danger' : 'black'}
+            onClick={() => onLike(id)}
+          />
+        </ActionItem>
+        {/* <ActionItem>Teste</ActionItem> */}
       </Actions>
     </Item>
   )
@@ -117,6 +124,8 @@ export default function Feed() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [limit, setLimit] = useState(ITEMS_PER_PAGE)
   const [totalRecords, setTotalRecords] = useState(0)
+
+  const { isAuthenticated, user = {} } = useAuth()
 
   const invalidText = text.length > MAX_CHARACTERS
 
@@ -133,6 +142,9 @@ export default function Feed() {
       getAll()
     }
   }, [getAll, items.length])
+
+  const onLike = (publicationId) =>
+    api.put(`/publication/like?${buildQueryString({ publicationId })}`)
 
   const onPressShowMore = () => {
     setLimit((p) => p + ITEMS_PER_PAGE)
@@ -155,43 +167,50 @@ export default function Feed() {
   return (
     <Layout>
       <Row>
+        {isAuthenticated && (
+          <Column size={12}>
+            <Textarea
+              value={text}
+              onChange={({ target }) => setText(target.value)}
+              placeholder="Type some content..."
+              onKeyDown={({ shiftKey, code }) => {
+                if (code === 'Enter') {
+                  if (!shiftKey) return onSubmit(text)
+                }
+              }}
+              rows={4}
+            />
+            <FieldActions>
+              <FieldActionsSection>
+                <Icon name="report" cursor="not-allowed" />
+                <Icon name="report" cursor="not-allowed" />
+              </FieldActionsSection>
+              <FieldActionsSection>
+                <CharactersCounter invalid={invalidText}>
+                  {text.length} / {MAX_CHARACTERS}
+                </CharactersCounter>
+                <Button
+                  onClick={() => onSubmit(text)}
+                  disabled={isSubmitting || invalidText || !text.length}
+                >
+                  Send
+                </Button>
+              </FieldActionsSection>
+            </FieldActions>
+          </Column>
+        )}
         <Column size={12}>
-          <Textarea
-            value={text}
-            onChange={({ target }) => setText(target.value)}
-            placeholder="Type some content..."
-            onKeyDown={({ shiftKey, code }) => {
-              if (code === 'Enter') {
-                if (!shiftKey) return onSubmit(text)
-              }
-            }}
-            rows={4}
-          />
-          <FieldActions>
-            <FieldActionsSection>
-              <Icon name="report" cursor="not-allowed" />
-              <Icon name="report" cursor="not-allowed" />
-            </FieldActionsSection>
-            <FieldActionsSection>
-              <CharactersCounter invalid={invalidText}>
-                {text.length} / {MAX_CHARACTERS}
-              </CharactersCounter>
-              <Button
-                onClick={() => onSubmit(text)}
-                disabled={isSubmitting || invalidText || !text.length}
-              >
-                Send
-              </Button>
-            </FieldActionsSection>
-          </FieldActions>
           {items.map((item, index) => {
             return (
               <Card
                 key={item._id}
+                id={item._id}
                 username={item.creator.username}
                 createdAt={new Date(item.createdAt)}
                 text={item.text}
+                isLiked={item.likes.includes(user._id)}
                 isLastItem={1 + index === items.length}
+                onLike={onLike}
               />
             )
           })}

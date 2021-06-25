@@ -43,6 +43,7 @@ export default function Create({ isOpen, onClose }) {
               {...register('title', { required: true })}
               placeholder="some title"
               error={errors.title}
+              autoComplete="off"
             />
           </Column>
 
@@ -52,6 +53,7 @@ export default function Create({ isOpen, onClose }) {
               {...register('link', { required: true, validate: (v) => isValidLink(v) })}
               placeholder="https://sitefromtest.com/somecontent"
               error={errors.link}
+              autoComplete="off"
             />
           </Column>
 
