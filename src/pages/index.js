@@ -10,9 +10,12 @@ const Actions = styled.div`
   transform: translateY(-50%);
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  left: 30px;
+  gap: ${({ theme }) => theme.sizes.sm};
+  left: 2%;
   z-index: 10;
+
+  @media screen and (max-width: 700px) {
+  }
 `
 
 export const Dot = styled.div`

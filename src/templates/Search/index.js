@@ -31,7 +31,8 @@ const Wrapper = styled.div`
 `
 
 const Content = styled.div`
-  width: 700px;
+  width: 80%;
+  max-width: 1200px;
   display: flex;
   flex-direction: column;
   justify-content: center;

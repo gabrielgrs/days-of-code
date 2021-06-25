@@ -1,41 +1,20 @@
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 import styled from 'styled-components'
-import { Button } from 'components'
+import { Button, Column, Row } from 'components'
 import { rgba } from 'polished'
 import { format } from 'date-fns'
 import { Icon } from 'components'
 import { feedMock } from 'helpers'
 
 const Wrapper = styled.div`
-  position: fixed;
-  top: 100px;
-  left: 0;
   width: 100%;
-  height: calc(100vh - 80px);
   display: flex;
   justify-content: center;
-  align-items: flex-start;
-
-  animation: feedWrapperAppears 400ms linear;
-
-  @keyframes feedWrapperAppears {
-    from {
-      opacity: 0;
-    }
-
-    to {
-      opacity: 1;
-    }
-  }
 `
 
 const Content = styled.div`
-  max-width: 80%;
-  width: 700px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  width: 80%;
+  max-width: 1200px;
 `
 
 const Textarea = styled.textarea`
@@ -120,33 +99,41 @@ export default function Feed() {
   return (
     <Wrapper>
       <Content>
-        <div style={{ color: 'red' }}>This screen is a mock</div>
-        <Textarea
-          value={text}
-          onChange={({ target }) => setText(target.value)}
-          placeholder="Type some content..."
-          rows={4}
-        />
-        <FieldActions>
-          <FieldActionsSection>
-            <Icon name="report" cursor="pointer" />
-            <Icon name="report" cursor="pointer" />
-          </FieldActionsSection>
-          <FieldActionsSection>
-            <CharactersCounter invalid={invalidText}>
-              {text.length} / {MAX_CHARACTERS}
-            </CharactersCounter>
-            <Button>Send</Button>
-          </FieldActionsSection>
-        </FieldActions>
-        {feedMock.map((item) => (
-          <Card
-            key={item._id}
-            nickname={item.nickname}
-            createdAt={item.createdAt}
-            text={item.text}
-          />
-        ))}
+        <Row>
+          <Column size={12}>
+            <div style={{ color: 'red' }}>This screen is a mock</div>
+          </Column>
+        </Row>
+        <Row>
+          <Column size={12}>
+            <Textarea
+              value={text}
+              onChange={({ target }) => setText(target.value)}
+              placeholder="Type some content..."
+              rows={4}
+            />
+            <FieldActions>
+              <FieldActionsSection>
+                <Icon name="report" cursor="pointer" />
+                <Icon name="report" cursor="pointer" />
+              </FieldActionsSection>
+              <FieldActionsSection>
+                <CharactersCounter invalid={invalidText}>
+                  {text.length} / {MAX_CHARACTERS}
+                </CharactersCounter>
+                <Button>Send</Button>
+              </FieldActionsSection>
+            </FieldActions>
+            {feedMock.map((item) => (
+              <Card
+                key={item._id}
+                nickname={item.nickname}
+                createdAt={item.createdAt}
+                text={item.text}
+              />
+            ))}
+          </Column>
+        </Row>
       </Content>
     </Wrapper>
   )
