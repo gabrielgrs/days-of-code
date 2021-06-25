@@ -50,7 +50,7 @@ const CloseButton = styled.button`
   right: -8px;
   border-radius: 50px;
   border: none;
-  box-shadow: ${({ theme }) => theme.shadows.colored(theme.colors.primary)};
+  box-shadow: ${({ theme }) => theme.shadows.colored(theme.colors.black)};
   background: ${({ theme }) => theme.colors.white};
 
   &:hover {

@@ -31,15 +31,20 @@ const CharactersCounter = styled.div`
 const MAX_CHARACTERS = 50
 
 export default function Feed({ onSubmit }) {
-  const { register, handleSubmit, formState, watch } = useForm()
+  const { register, handleSubmit, formState, watch, setValue } = useForm()
   const watchedText = watch('text') || ''
   const { isSubmitting, errors } = formState
   const { isAuthenticated } = useAuth()
 
   if (!isAuthenticated) return null
 
+  const submitAndResetInput = (values) => {
+    setValue('text', '')
+    return onSubmit(values)
+  }
+
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form onSubmit={handleSubmit(submitAndResetInput)}>
       <Textarea
         {...register('text', {
           required: true,

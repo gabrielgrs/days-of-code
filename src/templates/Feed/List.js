@@ -69,7 +69,7 @@ function FeedList({ items, onLike }) {
         text={item.text}
         isLiked={item.likes.includes(user._id)}
         isLastItem={1 + index === items.length}
-        onLike={onLike}
+        onLike={() => onLike(item._id)}
       />
     )
   })
