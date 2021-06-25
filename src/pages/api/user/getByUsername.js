@@ -1,3 +1,4 @@
+import { generateLearningCounts } from 'helpers'
 import userCollection from 'services/collections/user'
 import { interceptLog } from 'services/log'
 import withMiddlewares from 'services/withMiddlewares'
@@ -8,16 +9,7 @@ async function request(req, res) {
 
     const data = await userCollection.findOne({ username }).populate('learnings')
 
-    const counts = data.learnings.reduce((acc, curr) => {
-      curr.technologies.map((tech) => {
-        if (acc[tech]) {
-          acc[tech] += acc[tech] + 1
-        } else {
-          acc[tech] = 1
-        }
-      })
-      return acc
-    }, {})
+    const counts = generateLearningCounts(data.learnings)
 
     return res.status(200).send({ ...data.toObject(), counts })
   } catch (error) {

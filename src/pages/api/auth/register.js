@@ -6,16 +6,20 @@ import withMiddlewares from 'services/withMiddlewares'
 
 async function request(req, res) {
   try {
-    const { email, password } = req.body
+    const { password } = req.body
 
-    const data = await userCollection.create({ email, password: md5(password) })
+    const data = await userCollection.create({
+      ...req.body,
+      password: md5(password),
+      learnings: [],
+    })
 
     if (!data) return res.status(400).send({ message: 'Invalid user' })
 
-    const { _id } = data
+    const { _id, email } = data
     const token = await generateToken({ _id, email })
 
-    return res.status(200).send({ token, user: data })
+    return res.status(200).send({ token, user: { ...data.toObject(), counts: {} } })
   } catch (error) {
     return interceptLog(req, res, error)
   }

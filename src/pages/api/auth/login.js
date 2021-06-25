@@ -1,3 +1,4 @@
+import { generateLearningCounts } from 'helpers'
 import md5 from 'md5'
 import userCollection from 'services/collections/user'
 import { interceptLog } from 'services/log'
@@ -13,20 +14,11 @@ async function request(req, res) {
 
     if (!data) return res.status(400).send({ message: 'Invalid user' })
 
-    const { _id, username, learnings = [] } = data
+    const { _id, learnings } = data
 
-    const token = await generateToken({ _id, username })
+    const token = await generateToken({ _id })
 
-    const counts = learnings.reduce((acc, curr) => {
-      curr.technologies.map((tech) => {
-        if (acc[tech]) {
-          acc[tech] += acc[tech] + 1
-        } else {
-          acc[tech] = 1
-        }
-      })
-      return acc
-    }, {})
+    const counts = generateLearningCounts(learnings)
 
     return res.status(200).send({ token, user: { ...data.toObject(), counts } })
   } catch (error) {

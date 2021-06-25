@@ -41,3 +41,15 @@ export const mock = Array.from({ length: 10 }).map((_, index) => {
     language: randomLanguage,
   }
 })
+
+export const generateLearningCounts = (learnings = []) =>
+  learnings.reduce((acc, curr) => {
+    curr.technologies.map((tech) => {
+      if (acc[tech]) {
+        acc[tech] += acc[tech] + 1
+      } else {
+        acc[tech] = 1
+      }
+    })
+    return acc
+  }, {})

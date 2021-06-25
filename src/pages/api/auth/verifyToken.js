@@ -1,3 +1,4 @@
+import { generateLearningCounts } from 'helpers'
 import userCollection from 'services/collections/user'
 import { interceptLog } from 'services/log'
 import { decodeToken, generateToken } from 'services/token'
@@ -12,16 +13,7 @@ async function request(req, res, { token }) {
     const { username, learnings } = data
     const refreshedToken = await generateToken({ _id, username })
 
-    const counts = learnings.reduce((acc, curr) => {
-      curr.technologies.map((tech) => {
-        if (acc[tech]) {
-          acc[tech] = acc[tech] + 1
-        } else {
-          acc[tech] = 1
-        }
-      })
-      return acc
-    }, {})
+    const counts = generateLearningCounts(learnings)
 
     return res.status(200).send({ token: refreshedToken, user: { ...data.toObject(), counts } })
   } catch (error) {
