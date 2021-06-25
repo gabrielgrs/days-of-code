@@ -1,5 +1,4 @@
 import { Fragment, useState } from 'react'
-import styled from 'styled-components'
 
 import Profile from 'templates/Profile'
 import Auth from 'templates/Auth'
@@ -8,51 +7,31 @@ import useAuth from 'hooks/useAuth'
 import useTheme from 'hooks/useTheme'
 import Icon from 'components/Icon'
 
-const Nav = styled.div`
-  position: fixed;
-  left: 0;
-  bottom: 0;
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  border-top: solid ${({ theme }) => theme.colors.silver} 1px;
-  z-index: 1;
-  background: ${({ theme }) => theme.colors.white};
+import Loader from './Loader'
 
-  & .icon {
-    transition: all 300ms linear;
-
-    &:hover {
-      transform: scale(1.2);
-    }
-  }
-`
-
-const Section = styled.div`
-  display: flex;
-  gap: ${({ theme }) => theme.sizes.sm};
-  padding: ${({ theme }) => `${theme.sizes.xs} ${theme.sizes.sm}`};
-`
+import * as S from './styles'
 
 export default function Home() {
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false)
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false)
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
 
-  const { isAuthenticated } = useAuth()
+  const { isAuthenticated, loading } = useAuth()
   const { themeName, onChangeTheme } = useTheme()
+
+  if (loading) return <Loader />
 
   return (
     <Fragment>
-      <Nav>
-        <Section>
+      <S.Nav>
+        <S.Section>
           {themeName == 'light' ? (
             <Icon cursor="pointer" name="moon" onClick={() => onChangeTheme('dark')} height={24} />
           ) : (
             <Icon cursor="pointer" name="sun" onClick={() => onChangeTheme('light')} height={24} />
           )}
-        </Section>
-        <Section>
+        </S.Section>
+        <S.Section>
           {isAuthenticated && (
             <Icon
               name="add"
@@ -77,8 +56,8 @@ export default function Home() {
               height={24}
             />
           )}
-        </Section>
-      </Nav>
+        </S.Section>
+      </S.Nav>
 
       <Profile isOpen={isProfileModalOpen} onClose={() => setIsProfileModalOpen(false)} />
       <Auth isOpen={isAuthModalOpen} onClose={() => setIsAuthModalOpen(false)} />
