@@ -19,8 +19,8 @@ function MyApp({ Component, pageProps }) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <ThemeProvider>
+        <GlobalStyles />
         <AuthProvider>
-          <GlobalStyles />
           <Navbar />
           <Component {...pageProps} />
         </AuthProvider>

@@ -31,13 +31,18 @@ export default function Home() {
     feed: 'feed',
   }
 
-  const [screen, setScreen] = useState(screens.search)
+  const [screen, setScreen] = useState(localStorage.getItem('@doc:lastPage') ?? screens.search)
+
+  const onChangeScreen = (screenKey) => {
+    setScreen(screenKey)
+    localStorage.setItem('@doc:lastPage', screenKey)
+  }
 
   return (
     <Fragment>
       <Actions>
         {Object.keys(screens).map((key) => (
-          <Dot key={key} active={screen === key} onClick={() => setScreen(key)} />
+          <Dot key={key} active={screen === key} onClick={() => onChangeScreen(key)} />
         ))}
       </Actions>
       {screen === screens.search && <Search />}

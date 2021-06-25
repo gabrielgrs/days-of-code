@@ -13,6 +13,7 @@
     "@styled-icons/ionicons-outline": "^10.34.0",
     "@styled-icons/material-outlined": "^10.34.0",
     "axios": "^0.21.1",
+    "date-fns": "^2.22.1",
     "faker": "^5.5.3",
     "jsonwebtoken": "^8.5.1",
     "md5": "^2.3.0",

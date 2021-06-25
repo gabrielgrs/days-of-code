@@ -17,6 +17,7 @@ const Nav = styled.div`
   justify-content: space-between;
   border-top: solid ${({ theme }) => theme.colors.silver} 1px;
   z-index: 1;
+  background: ${({ theme }) => theme.colors.white};
 
   & .icon {
     transition: all 300ms linear;
