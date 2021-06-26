@@ -2,6 +2,7 @@ import { useState, createContext, useCallback, useEffect } from 'react'
 import * as themes from 'styles/themes'
 import { SkeletonTheme } from 'react-loading-skeleton'
 import { ThemeProvider as StyledThemeProvider } from 'styled-components'
+import NextNprogress from 'nextjs-progressbar'
 
 export const ThemeContext = createContext({
   themeName: 'light',
@@ -28,6 +29,12 @@ export function ThemeProvider({ children }) {
     <ThemeContext.Provider value={{ themeName, onChangeTheme, theme }}>
       <StyledThemeProvider theme={theme}>
         <SkeletonTheme color={theme.colors.silver} highlightColor={theme.colors.white}>
+          <NextNprogress
+            color={theme.colors.primary}
+            startPosition={0.3}
+            stopDelayMs={300}
+            height={5}
+          />
           {children}
         </SkeletonTheme>
       </StyledThemeProvider>

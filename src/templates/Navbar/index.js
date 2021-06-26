@@ -26,35 +26,33 @@ export default function Home() {
       <S.Nav>
         <S.Section>
           {themeName == 'light' ? (
-            <Icon cursor="pointer" name="moon" onClick={() => onChangeTheme('dark')} height={24} />
+            <S.Item onClick={() => onChangeTheme('dark')}>
+              <Icon name="moon" height={24} />
+            </S.Item>
           ) : (
-            <Icon cursor="pointer" name="sun" onClick={() => onChangeTheme('light')} height={24} />
+            <S.Item onClick={() => onChangeTheme('light')}>
+              <Icon name="sun" height={24} />
+            </S.Item>
           )}
         </S.Section>
         <S.Section>
           {isAuthenticated && (
-            <Icon
-              name="add"
-              cursor="pointer"
-              onClick={() => setIsCreateModalOpen(true)}
-              height={24}
-            />
+            <S.Item onClick={() => setIsCreateModalOpen(true)}>
+              {/* <Icon name="add" height={24} /> */}
+              <span>Add Content</span>
+            </S.Item>
           )}
           {isAuthenticated && (
-            <Icon
-              cursor="pointer"
-              name="profile"
-              onClick={() => setIsProfileModalOpen(true)}
-              height={24}
-            />
+            <S.Item onClick={() => setIsProfileModalOpen(true)}>
+              {/* <Icon name="profile" height={24} /> */}
+              <span>Profile</span>
+            </S.Item>
           )}
           {!isAuthenticated && (
-            <Icon
-              cursor="pointer"
-              name="profile"
-              onClick={() => setIsAuthModalOpen(true)}
-              height={24}
-            />
+            <S.Item onClick={() => setIsAuthModalOpen(true)}>
+              {/* <Icon name="profile" height={24} /> */}
+              <span>Login</span>
+            </S.Item>
           )}
         </S.Section>
       </S.Nav>

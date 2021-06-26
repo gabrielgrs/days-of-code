@@ -16,8 +16,8 @@ function MyApp({ Component, pageProps }) {
   return (
     <Fragment>
       <Head>
-        <title>Days Of Code ~</title>
-        <meta name="description" content="Days of Code ~" />
+        <title>D. Work ~</title>
+        <meta name="description" content="D. Work ~" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <ThemeProvider>

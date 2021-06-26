@@ -46,16 +46,15 @@ const ModalWrapper = styled.div`
 
 const CloseButton = styled.button`
   position: absolute;
-  top: -8px;
-  right: -8px;
-  border-radius: 50px;
+  top: 0;
+  right: 0;
+  border-radius: 0 0 0 ${({ theme }) => theme.radius.default};
+
   border: none;
   box-shadow: ${({ theme }) => theme.shadows.colored(theme.colors.black)};
   background: ${({ theme }) => theme.colors.white};
 
   &:hover {
-    top: -10px;
-    right: -10px;
     padding: 4px;
   }
 `

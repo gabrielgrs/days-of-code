@@ -1,5 +1,6 @@
 import * as boxIcons from '@styled-icons/ionicons-outline'
-import * as materialIcons from '@styled-icons/material-outlined'
+import * as boxIconsRegular from '@styled-icons/boxicons-regular'
+import * as fluentUIIcons from '@styled-icons/fluentui-system-filled'
 
 const icons = {
   close: boxIcons.Close,
@@ -10,10 +11,10 @@ const icons = {
   heart: boxIcons.Heart,
   filters: boxIcons.Filter,
   search: boxIcons.Search,
-  rightArrow: boxIcons.ArrowForward,
-  leftArrow: materialIcons.ArrowBack,
-  report: materialIcons.Block,
-  edit: boxIcons.Pencil,
+  rightArrow: fluentUIIcons.IosArrowRight,
+  leftArrow: fluentUIIcons.IosArrowLeft,
+  report: boxIconsRegular.Error,
+  edit: boxIconsRegular.Edit,
   eye: boxIcons.Eye,
 }
 

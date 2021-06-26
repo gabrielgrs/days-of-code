@@ -21,6 +21,7 @@ export default createGlobalStyle`
         'padding',
         'border',
         'gap',
+        'height',
       ])};
     color: ${({ theme }) => theme.colors.black};
   }
