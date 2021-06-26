@@ -1,6 +1,6 @@
 import { useContext } from 'react'
 import styled from 'styled-components'
-import { Modal, Tag, TagsContainer, Row, Column, Icon } from 'components'
+import { Modal, Tag, TagsContainer, Row, Column, Icon, Button } from 'components'
 import { AuthContext } from 'contexts/AuthContext'
 import { useRouter } from 'next/router'
 
@@ -12,9 +12,27 @@ const Flex = styled.div`
   text-align: center;
 `
 
+const LogoutButton = styled(Button)`
+  color: ${({ theme }) => theme.colors.danger};
+  border: none;
+  background: none;
+
+  &:hover {
+    color: ${({ theme }) => theme.colors.danger};
+    border: none;
+    background: none;
+  }
+`
+
 export default function Profile({ isOpen, onClose }) {
-  const { user = {} } = useContext(AuthContext)
+  const { user = {}, onLogout } = useContext(AuthContext)
   const { push } = useRouter()
+
+  const onPressLogout = () => {
+    onClose()
+    onLogout()
+    push('/')
+  }
 
   if (!isOpen) return null
 
@@ -60,6 +78,12 @@ export default function Profile({ isOpen, onClose }) {
               </Tag>
             ))}
           </TagsContainer>
+        </Column>
+
+        <Column size={12}>
+          <LogoutButton onClick={onPressLogout} fullWidth color="danger">
+            Logout
+          </LogoutButton>
         </Column>
       </Row>
     </Modal>

@@ -5,11 +5,17 @@ export const AuthContext = createContext({
   loading: false,
   user: undefined,
   isAuthenticated: false,
+  onLogout: () => null,
 })
 
 export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(false)
   const [user, setUser] = useState(undefined)
+
+  const onLogout = () => {
+    setUser(undefined)
+    localStorage.clear()
+  }
 
   const onAuthenticate = useCallback((_token, _user) => {
     if (!_token) throw Error(`Token is required`)
@@ -44,7 +50,9 @@ export function AuthProvider({ children }) {
   }, [onVerifyToken])
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated: !!user, user, onAuthenticate, loading }}>
+    <AuthContext.Provider
+      value={{ isAuthenticated: !!user, user, onAuthenticate, loading, onLogout }}
+    >
       {children}
     </AuthContext.Provider>
   )
