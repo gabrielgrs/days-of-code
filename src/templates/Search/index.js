@@ -73,7 +73,9 @@ const FiltersButton = styled(BaseButton)`
 
 const SearchButton = styled(BaseButton)`
   cursor: ${({ searching }) => (searching ? 'not-allowed' : 'pointer')};
-  color: ${({ theme, searching }) => (searching ? theme.colors.black : theme.colors.primary)};
+  color: ${({ theme }) => theme.colors.primary};
+
+  opacity: ${({ theme, searching }) => searching && theme.opacity.default};
 
   &:before {
     content: '[ ';
@@ -91,12 +93,10 @@ const ResultFrom = styled.div`
   text-align: center;
 `
 
-const ITEMS_PER_PAGE = 10
-
 export default function Search() {
+  const [page, setPage] = useState(1)
   const [items, setItems] = useState([])
   const [totalRecords, setTotalRecords] = useState(0)
-  const [searchLimit, setSearchLimit] = useState(0)
   const [showFilters, setShowFilters] = useState(false)
   const [searchText, setSearchText] = useState(undefined)
   const [lastSearch, setLastSearch] = useState(undefined)
@@ -124,7 +124,7 @@ export default function Search() {
     setLastSearch(formatted)
   }
 
-  const onSearch = async (limit = ITEMS_PER_PAGE) => {
+  const onSearch = async (page = 1) => {
     if (searching) return null
 
     setShowFilters(false)
@@ -136,7 +136,7 @@ export default function Search() {
       level: selectedLevel,
       technologies: selectedTechnologies,
       language: selectedLanguage,
-      limit,
+      page,
     })
 
     onSetLastSearch(queryString)
@@ -148,13 +148,17 @@ export default function Search() {
     setSearching(false)
   }
 
-  const onShowMore = () => {
-    setSearchLimit((p) => p + ITEMS_PER_PAGE)
-    onSearch(searchLimit + ITEMS_PER_PAGE)
+  const onChangePage = (currentPage) => {
+    setPage(currentPage)
+  }
+
+  const onPressToSearch = () => {
+    setPage(1)
+    onSearch(1)
   }
 
   return (
-    <Layout alignItems="center" height="100vh">
+    <Layout alignItems={items.length ? 'flex-start' : 'center'} height={!items.length && '100vh'}>
       <Wrapper>
         <Logo />
         <Main>
@@ -162,12 +166,12 @@ export default function Search() {
             <SearchInput
               placeholder="Type your search..."
               value={searchText}
-              onKeyDown={({ code }) => code === 'Enter' && onSearch()}
+              onKeyDown={({ code }) => code === 'Enter' && onPressToSearch()}
               onChange={({ target }) => setSearchText(target.value)}
             />
             <FiltersButton onClick={() => setShowFilters((p) => !p)}>Filters</FiltersButton>
-            <SearchButton searching={searching} onClick={() => onSearch()}>
-              {searching ? '...' : 'Search'}
+            <SearchButton searching={searching} onClick={() => onPressToSearch()}>
+              Search
             </SearchButton>
           </InputWrapper>
           {!!items.length && !showFilters && lastSearch && (
@@ -193,7 +197,8 @@ export default function Search() {
           onLearn={onLearn}
           onReport={onReport}
           totalRecords={totalRecords}
-          onShowMore={onShowMore}
+          currentPage={page}
+          onChangePage={(page) => onChangePage(page)}
         />
       </Wrapper>
     </Layout>

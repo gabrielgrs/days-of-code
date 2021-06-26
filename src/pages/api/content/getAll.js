@@ -1,5 +1,6 @@
 import withMiddlewares from 'services/withMiddlewares'
 import contentCollection from 'services/collections/content'
+import { interceptLog } from 'services/log'
 
 function createFilters(query) {
   if (!Object.keys(query).length) return {}
@@ -17,17 +18,20 @@ function createFilters(query) {
 
 async function request(req, res) {
   try {
-    const { limit, ...rest } = req.query
+    const { page, ...rest } = req.query
     const querySearch = createFilters(rest)
 
-    const data = await contentCollection.find(querySearch).limit(+limit)
+    const data = await contentCollection
+      .find(querySearch)
+      .limit(10)
+      .skip(Number(page) * 10)
     const totalRecords = await contentCollection.find(querySearch).countDocuments()
 
     res.setHeader('x-total-records', totalRecords)
 
     return res.status(200).send(data)
   } catch (error) {
-    return res.status(500).send(error)
+    return interceptLog(req, res, error)
   }
 }
 

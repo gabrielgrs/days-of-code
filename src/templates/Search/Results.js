@@ -1,13 +1,29 @@
-import { Fragment } from 'react'
+import { Fragment, useMemo, useState } from 'react'
 import styled from 'styled-components'
 import useAuth from 'hooks/useAuth'
-import { Button, Icon } from 'components'
+import { Icon } from 'components'
 
 const Results = styled.div`
+  width: 100%;
+`
+
+const List = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
   gap: ${({ theme }) => theme.sizes.sm};
+
+  animation: resultsAppears 300ms linear;
+
+  @keyframes resultsAppears {
+    from {
+      opacity: 0;
+    }
+
+    to {
+      opacity: 1;
+    }
+  }
 `
 
 const Item = styled.div`
@@ -22,15 +38,15 @@ const Base = styled.div`
   gap: ${({ theme }) => theme.sizes.xxs};
 `
 
-const Actions = styled(Base)`
+const TopActions = styled(Base)`
   top: 0;
 `
 
-const Learned = styled(Base)`
+const BottomActions = styled(Base)`
   bottom: 0;
 `
 
-const Link = styled.div`
+const Link = styled.a`
   font-size: 0.9rem;
 `
 
@@ -43,41 +59,125 @@ const About = styled.div`
   font-style: italic;
 `
 
-export default function Result({ list, totalRecords, onLike, onLearn, onReport, onShowMore }) {
+const Pages = styled.div`
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  margin: ${({ theme }) => theme.sizes.sm} 0;
+  gap: ${({ theme }) => theme.sizes.xs};
+`
+
+const Page = styled.div`
+  cursor: pointer;
+  color: ${({ theme, active }) => (active ? theme.colors.primary : theme.colors.black)};
+  font-size: 1.4rem;
+
+  &:hover {
+    opacity: ${({ theme }) => theme.opacity.default};
+  }
+`
+
+const Learn = styled.div`
+  cursor: pointer;
+
+  &:hover {
+    opacity: ${({ theme }) => theme.opacity.default};
+  }
+`
+
+const ITEMS_PER_PAGE = 10
+
+export default function Result({
+  list,
+  totalRecords,
+  onLike,
+  onLearn,
+  onReport,
+  currentPage,
+  onChangePage,
+}) {
   const { user, isAuthenticated } = useAuth()
+  const [localLikes, setLocalLikes] = useState([])
+  const [localLearnings, setLocalLearnings] = useState([])
+
+  const totalPages = useMemo(() => {
+    if (totalRecords < ITEMS_PER_PAGE) return 1
+    return Math.ceil(totalRecords / ITEMS_PER_PAGE)
+  }, [totalRecords])
+
+  const onPressLikeButton = (itemId) => {
+    onLike(itemId)
+    setLocalLikes((p) => (p.includes(itemId) ? p.filter((x) => x !== itemId) : [...p, itemId]))
+  }
+
+  const onPressToMarkAsLearned = (itemId) => {
+    onLearn(itemId)
+    setLocalLearnings((p) => (p.includes(itemId) ? p.filter((x) => x !== itemId) : [...p, itemId]))
+  }
 
   return (
     <Results>
-      {list.map((item) => (
-        <Item key={item._id}>
-          {isAuthenticated && (
-            <Fragment>
-              <Actions>
-                <Icon
-                  name="heart"
-                  cursor="pointer"
-                  color={item.likes.includes(user._id) ? 'black' : 'danger'}
-                  onClick={() => onLike(item._id)}
-                />
-                <Icon name="report" cursor="pointer" onClick={() => onReport(item._id)} />
-              </Actions>
-              <Learned>
-                <div onClick={() => onLearn(item._id)}>
-                  {user.learnings.includes(item._id) ? 'Unmark' : 'Mark'} as learned
-                </div>
-              </Learned>
-            </Fragment>
-          )}
-          <Link>{item.link}</Link>
-          <Title target="_blank" href={item.link}>
-            {item.title}
-          </Title>
-          <About>
-            {item.level} - {item.technologies.join(',')} - {item.language}
-          </About>
-        </Item>
-      ))}
-      {totalRecords > list.length && <Button onClick={onShowMore}>Show more</Button>}
+      <List key={currentPage}>
+        {list.map((item) => (
+          <Item key={item._id}>
+            {isAuthenticated && (
+              <Fragment>
+                <TopActions>
+                  <Icon
+                    name="heart"
+                    cursor="pointer"
+                    color={
+                      item.likes.includes(user._id) || localLikes.includes(item._id)
+                        ? 'danger'
+                        : 'black'
+                    }
+                    onClick={() => onPressLikeButton(item._id)}
+                  />
+                  <Icon name="report" cursor="pointer" onClick={() => onReport(item._id)} />
+                </TopActions>
+                <BottomActions>
+                  <Learn onClick={() => onPressToMarkAsLearned(item._id)}>
+                    {user.learnings.includes(item._id) || localLearnings.includes(item._id)
+                      ? 'Unmark'
+                      : 'Mark'}{' '}
+                    as learned
+                  </Learn>
+                </BottomActions>
+              </Fragment>
+            )}
+            <Link target="_blank" href={item.link}>
+              {item.link}
+            </Link>
+            <div>
+              <Title target="_blank" href={item.link}>
+                {item.title}
+              </Title>
+            </div>
+            <About>
+              {item.level} - {item.technologies.join(',')} - {item.language}
+            </About>
+          </Item>
+        ))}
+      </List>
+      {totalPages > 1 && (
+        <Pages>
+          {Array.from({ length: totalPages }).map((_, index) => {
+            const position = index + 1
+            const range = 4
+            if (position >= currentPage + range || position <= currentPage - range) return null
+            return (
+              <Page
+                onClick={() => onChangePage(position)}
+                key={index}
+                active={currentPage === position}
+              >
+                {position}
+              </Page>
+            )
+          })}
+        </Pages>
+      )}
     </Results>
   )
 }

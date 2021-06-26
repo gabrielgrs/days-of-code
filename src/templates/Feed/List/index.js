@@ -1,4 +1,4 @@
-import { memo } from 'react'
+import { memo, useState } from 'react'
 import styled from 'styled-components'
 import { rgba } from 'polished'
 import { format } from 'date-fns'
@@ -60,7 +60,14 @@ function Card({ id, username, createdAt, text, isLastItem, onLike, isLiked }) {
 }
 
 function FeedList({ items, onLike, loading }) {
+  const [localLikes, setLocalLikes] = useState([])
+
   const { user = {} } = useAuth()
+
+  const onPressLike = (itemId) => {
+    onLike(itemId)
+    setLocalLikes((p) => (p.includes(itemId) ? p.filter((x) => x !== itemId) : [...p, itemId]))
+  }
 
   if (loading) return <Loader />
 
@@ -72,9 +79,9 @@ function FeedList({ items, onLike, loading }) {
         username={item.creator.username}
         createdAt={new Date(item.createdAt)}
         text={item.text}
-        isLiked={item.likes.includes(user._id)}
+        isLiked={item.likes.includes(user._id) || localLikes.includes(item._id)}
         isLastItem={1 + index === items.length}
-        onLike={() => onLike(item._id)}
+        onLike={() => onPressLike(item._id)}
       />
     )
   })
