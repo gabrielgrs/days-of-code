@@ -10,12 +10,9 @@ const Actions = styled.div`
   transform: translateY(-50%);
   display: flex;
   flex-direction: column;
-  gap: ${({ theme }) => theme.sizes.sm};
+  gap: ${({ theme }) => theme.sizes.xs};
   left: 2%;
-  z-index: 10;
-
-  @media screen and (max-width: 700px) {
-  }
+  z-index: 2;
 `
 
 export const Dot = styled.div`
@@ -25,7 +22,6 @@ export const Dot = styled.div`
   border-radius: ${({ active }) => (active ? '10px' : '50%')};
   transition: ${({ theme }) => theme.helpers.transitions(['height', 'border-radius'])};
   background: ${({ theme }) => theme.colors.primary};
-  background: ${({ theme }) => theme.colors.silver};
 `
 
 export default function Home() {

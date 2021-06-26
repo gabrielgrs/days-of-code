@@ -39,11 +39,16 @@ export default function Auth({ isOpen, onClose }) {
     reset()
   }, [reset, isRegister])
 
+  const onPressClose = () => {
+    reset()
+    onClose()
+  }
+
   const onSubmit = async (values) => {
     try {
       const { data } = await api.post(`/auth/${isRegister ? 'register' : 'login'}`, values)
       onAuthenticate(data.token, data.user)
-      onClose()
+      onPressClose()
     } catch (error) {
       alert('Failed to request')
     }
@@ -52,7 +57,7 @@ export default function Auth({ isOpen, onClose }) {
   if (!isOpen) return null
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
+    <Modal isOpen={isOpen} onClose={onPressClose}>
       <form onSubmit={handleSubmit(onSubmit)}>
         <Tabs>
           <Tab onClick={() => setIsRegister(false)} active={!isRegister}>
